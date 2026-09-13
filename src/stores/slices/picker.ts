@@ -17,7 +17,7 @@ export interface PickerSlice {
   openPicker: (side: Side) => Promise<void>
   closePicker: () => void
   pickNode: (side: Side, id: string) => Promise<void>
-  runSearch: (side: Side) => Promise<void>
+  runSearch: (side: Side, query?: string) => Promise<void>
   moveHighlight: (side: Side, direction: 1 | -1) => void
   leafIds: (side: Side) => string[]
   loadTree: (side: Side) => Promise<void>
@@ -110,9 +110,14 @@ export const createPickerSlice: SliceCreator<PickerSlice> = (set, get) => ({
   },
 
   /** Search 按钮：先精确匹配 label，再退回第一个模糊命中。与从树上点选是两条不同入口。 */
-  runSearch: async (side) => {
-    const q = get()[QUERY_KEY[side]].trim()
+  runSearch: async (side, query) => {
+    // 输入框的文本走本地 state + 防抖，点 Search 时 store 里可能还是旧值，
+    // 所以允许调用方把当前输入直接传进来。
+    const q = (query ?? get()[QUERY_KEY[side]]).trim()
     if (!q) return
+    set((s) => {
+      s[QUERY_KEY[side]] = q
+    })
 
     const { tree } = await getNodeTree({ q })
     const leaves = flattenLeaves(tree)
