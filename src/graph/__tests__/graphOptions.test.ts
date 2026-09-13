@@ -25,10 +25,7 @@ describe('buildGraphOptions', () => {
   })
 
   it('keeps the design canvas force parameters', () => {
-    const layout = buildGraphOptions({ side: 'L', simplified: false }).layout as Record<
-      string,
-      Record<string, number>
-    >
+    const { layout } = buildGraphOptions({ side: 'L', simplified: false })
     expect(layout.link.distance).toBe(260)
     expect(layout.manyBody.strength).toBe(-520)
     expect(layout.collide.radius).toBe(118)
