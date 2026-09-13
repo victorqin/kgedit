@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@antv/g6@5/dist/g6.min.js"></script>
+<style>
+  html, body { margin:0; padding:0; background:#0b0f15; }
+  * { scrollbar-width: thin; scrollbar-color:#2b3543 transparent; }
+  *::-webkit-scrollbar { width:8px; height:8px; }
+  *::-webkit-scrollbar-thumb { background:#2b3543; border-radius:4px; }
+  a { color:#4ade80; }
+  a:hover { color:#86efac; }
+  input::placeholder { color:#4b5769; }
+  @keyframes kgPulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+</style>
+</helmet>
+
+<div style="display:flex;min-height:100vh;background:#0b0f15;color:#e2e8f0;font-family:'IBM Plex Sans',system-ui,sans-serif">
+
+  <div style="width:64px;flex:none;background:#0d131b;border-right:1px solid #1c2431;display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:10px">
+    <div style="width:34px;height:34px;border-radius:9px;background:#4ade8018;border:1px solid #4ade8055;display:grid;place-items:center;margin-bottom:10px">
+      <svg width="18" height="18" viewBox="0 0 18 18"><circle cx="4" cy="4" r="2.6" fill="#4ade80"></circle><circle cx="14" cy="7" r="2.2" fill="#4ade80" opacity=".7"></circle><circle cx="6" cy="14" r="2.2" fill="#4ade80" opacity=".7"></circle><path d="M4 4 L14 7 M4 4 L6 14" stroke="#4ade80" stroke-width="1.1" opacity=".8"></path></svg>
+    </div>
+    <div style="width:38px;height:38px;border-radius:9px;display:grid;place-items:center" style-hover="background:#151d28">
+      <svg width="17" height="17" viewBox="0 0 17 17" fill="#58657a"><rect x="1" y="1" width="6.5" height="6.5" rx="1.6"></rect><rect x="9.5" y="1" width="6.5" height="6.5" rx="1.6"></rect><rect x="1" y="9.5" width="6.5" height="6.5" rx="1.6"></rect><rect x="9.5" y="9.5" width="6.5" height="6.5" rx="1.6"></rect></svg>
+    </div>
+    <div style="width:38px;height:38px;border-radius:9px;display:grid;place-items:center" style-hover="background:#151d28">
+      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" stroke="#58657a" stroke-width="1.6"><circle cx="7.2" cy="7.2" r="5.2"></circle><path d="M11.2 11.2 L15.5 15.5"></path></svg>
+    </div>
+    <div style="width:38px;height:38px;border-radius:9px;display:grid;place-items:center;background:#4ade8014;border:1px solid #4ade8040">
+      <svg width="17" height="17" viewBox="0 0 18 18"><circle cx="4" cy="4" r="2.4" fill="none" stroke="#4ade80" stroke-width="1.5"></circle><circle cx="14" cy="14" r="2.4" fill="none" stroke="#4ade80" stroke-width="1.5"></circle><path d="M5.6 5.6 L12.4 12.4" stroke="#4ade80" stroke-width="1.5"></path></svg>
+    </div>
+    <div style="width:38px;height:38px;border-radius:9px;display:grid;place-items:center" style-hover="background:#151d28">
+      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" stroke="#58657a" stroke-width="1.5"><rect x="1.2" y="2.5" width="14.6" height="12" rx="2"></rect><path d="M1.2 6.5 H15.8"></path></svg>
+    </div>
+    <div style="width:38px;height:38px;border-radius:9px;display:grid;place-items:center" style-hover="background:#151d28">
+      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" stroke="#58657a" stroke-width="1.5"><circle cx="8.5" cy="8.5" r="2.6"></circle><circle cx="8.5" cy="8.5" r="6.6" stroke-dasharray="2.6 2.4"></circle></svg>
+    </div>
+    <div style="flex:1"></div>
+    <div style="width:38px;height:38px;border-radius:9px;display:grid;place-items:center;color:#58657a;font-size:15px">?</div>
+    <div style="width:38px;height:38px;border-radius:9px;display:grid;place-items:center">
+      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" stroke="#58657a" stroke-width="1.5"><path d="M6.5 2H2.2v13H6.5"></path><path d="M9.5 8.5H15.5 M12.8 5.8 L15.5 8.5 L12.8 11.2"></path></svg>
+    </div>
+  </div>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;padding:16px 18px 18px;gap:14px">
+
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg width="26" height="26" viewBox="0 0 18 18"><circle cx="4" cy="4" r="2.6" fill="#4ade80"></circle><circle cx="14" cy="7" r="2.2" fill="#4ade80" opacity=".7"></circle><circle cx="6" cy="14" r="2.2" fill="#4ade80" opacity=".7"></circle><path d="M4 4 L14 7 M4 4 L6 14" stroke="#4ade80" stroke-width="1.1" opacity=".8"></path></svg>
+        <span style="font-size:21px;font-weight:600;letter-spacing:-.01em">KG Studio</span>
+      </div>
+      <div style="flex:1"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#58657a;letter-spacing:.06em">{{ statLine }}</div>
+      <div style="width:30px;height:30px;border-radius:50%;border:1px solid #2b3543;display:grid;place-items:center;color:#8b97ab;font-size:13px">?</div>
+      <div style="width:32px;height:32px;border-radius:50%;background:#1e2936;border:1px solid #2b3543;display:grid;place-items:center;color:#cbd5e1;font-size:13px;font-weight:600">N</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:11px">
+      <div style="display:flex;align-items:flex-start;gap:0;position:relative;z-index:30">
+        <div style="flex:1;min-width:0;display:flex;gap:9px">
+          <div style="flex:1;min-width:0;position:relative">
+            <svg width="14" height="14" viewBox="0 0 17 17" fill="none" stroke="#4b5769" stroke-width="1.8" style="position:absolute;left:12px;top:13px"><circle cx="7.2" cy="7.2" r="5.2"></circle><path d="M11.2 11.2 L15.5 15.5"></path></svg>
+            <input value="{{ qStart }}" onChange="{{ onQStart }}" onKeyDown="{{ onStartKey }}" onFocus="{{ focusL }}" onBlur="{{ blurPicker }}" placeholder="Start node — click to browse" style="width:100%;box-sizing:border-box;padding:10px 12px 10px 34px;border-radius:8px;background:#101822;border:1px solid #2f6b45;color:#e2e8f0;font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;box-shadow:0 0 0 1px #4ade8018" style-focus="border-color:#4ade80;box-shadow:0 0 0 3px #4ade801f" />
+            <sc-if value="{{ openL }}">
+              <div style="position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;border-radius:10px;background:#0f151e;border:1px solid #2f6b45;box-shadow:0 18px 44px #000b;max-height:320px;overflow:auto;padding:6px">
+                <sc-if value="{{ emptyL }}">
+                  <div style="padding:14px 10px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4b5769">No node matches</div>
+                </sc-if>
+                <sc-for list="{{ rowsL }}" as="r" hint-placeholder-count="5">
+                  <div onClick="{{ r.onClick }}" style="{{ r.style }}" style-hover="background:#18212c">
+                    <span style="flex:none;width:10px;font-size:9px;color:#4b5769">{{ r.caret }}</span>
+                    <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.label }}</span>
+                    <span style="flex:none;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b97ab;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.meta }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+          <div onClick="{{ searchStart }}" style="flex:none;padding:10px 22px;border-radius:8px;background:#4ade80;color:#062012;font-size:13.5px;font-weight:600;cursor:pointer;display:grid;place-items:center" style-hover="background:#6ee79a">Search</div>
+        </div>
+        <div style="flex:none;width:64px"></div>
+        <div style="flex:1;min-width:0;display:flex;gap:9px">
+          <div style="flex:1;min-width:0;position:relative">
+            <svg width="14" height="14" viewBox="0 0 17 17" fill="none" stroke="#4b5769" stroke-width="1.8" style="position:absolute;left:12px;top:13px"><circle cx="7.2" cy="7.2" r="5.2"></circle><path d="M11.2 11.2 L15.5 15.5"></path></svg>
+            <input value="{{ qEnd }}" onChange="{{ onQEnd }}" onKeyDown="{{ onEndKey }}" onFocus="{{ focusR }}" onBlur="{{ blurPicker }}" placeholder="End node — click to browse" style="width:100%;box-sizing:border-box;padding:10px 12px 10px 34px;border-radius:8px;background:#101822;border:1px solid #2d5680;color:#e2e8f0;font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;box-shadow:0 0 0 1px #60a5fa18" style-focus="border-color:#60a5fa;box-shadow:0 0 0 3px #60a5fa1f" />
+            <sc-if value="{{ openR }}">
+              <div style="position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;border-radius:10px;background:#0f151e;border:1px solid #2d5680;box-shadow:0 18px 44px #000b;max-height:320px;overflow:auto;padding:6px">
+                <sc-if value="{{ emptyR }}">
+                  <div style="padding:14px 10px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4b5769">No node matches</div>
+                </sc-if>
+                <sc-for list="{{ rowsR }}" as="r" hint-placeholder-count="5">
+                  <div onClick="{{ r.onClick }}" style="{{ r.style }}" style-hover="background:#18212c">
+                    <span style="flex:none;width:10px;font-size:9px;color:#4b5769">{{ r.caret }}</span>
+                    <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.label }}</span>
+                    <span style="flex:none;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b97ab;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.meta }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+          <div onClick="{{ searchEnd }}" style="flex:none;padding:10px 22px;border-radius:8px;background:#60a5fa;color:#04121f;font-size:13.5px;font-weight:600;cursor:pointer;display:grid;place-items:center" style-hover="background:#84baff">Search</div>
+        </div>
+      </div>
+      <sc-if value="{{ hint }}">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#f59e0b;padding-left:2px">{{ hint }}</div>
+      </sc-if>
+
+      <div style="border:1px solid #1f2937;border-radius:10px;background:#0e141d;padding:10px 14px;min-width:0;box-sizing:border-box;display:flex;align-items:center;gap:14px;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:9px;flex:none">
+          <svg width="14" height="14" viewBox="0 0 17 17" fill="none" stroke="#8b97ab" stroke-width="1.4" style="flex:none"><circle cx="8.5" cy="8.5" r="6.8"></circle><path d="M1.7 8.5H15.3 M8.5 1.7 C11 4.5 11 12.5 8.5 15.3 C6 12.5 6 4.5 8.5 1.7"></path></svg>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;color:#8b97ab;font-weight:600">PATH STATUS</span>
+        </div>
+        <div style="width:1px;height:22px;background:#1f2937;flex:none"></div>
+        <div style="flex:1;min-width:0;display:flex;align-items:center;overflow-x:auto;overflow-y:hidden;padding:3px 0">
+          <sc-if value="{{ pathNone }}">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#8b97ab;white-space:nowrap">{{ pathNone }}</div>
+          </sc-if>
+          <div style="display:flex;flex-wrap:nowrap;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;font-size:12.5px">
+            <sc-for list="{{ pathSegs }}" as="p" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:5px;flex:none">
+                <span style="color:#9aa7b9;white-space:nowrap">{{ p.arrow }}</span>
+                <span onClick="{{ p.onClick }}" onContextMenu="{{ p.onCtx }}" title="Left-click → Start panel · Right-click → End panel" style="{{ p.style }}" style-hover="background:#1b2532">{{ p.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="width:1px;height:22px;background:#1f2937;flex:none"></div>
+        <span style="flex:none;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:#8b97ab;white-space:nowrap">L-CLICK → START · R-CLICK → END</span>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0;align-items:stretch;min-height:0;flex:1">
+      <div style="flex:1;min-width:0;border:1px solid #2f6b45;border-radius:10px;background:#0d1219;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 0 1px #4ade8010">
+        <div style="display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid #18212c">
+          <svg width="15" height="15" viewBox="0 0 17 17"><path d="M9.5 1 L3 9.6 H7.6 L7 16 L13.6 7.2 H9.2 Z" fill="#4ade80"></path></svg>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.1em;color:#4ade80;font-weight:600">START-CENTRIC SUBGRAPH</span>
+          <div style="flex:1"></div>
+          <div onClick="{{ addLeft }}" title="New blank node" style="width:26px;height:26px;border-radius:7px;border:1px solid #2f6b45;background:#4ade800f;color:#4ade80;display:grid;place-items:center;cursor:pointer;font-size:17px;line-height:1;padding-bottom:2px" style-hover="background:#4ade8024">+</div>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div onClick="{{ cycleHops }}" title="Hop depth — click to cycle 2 / 3 / 4" style="width:26px;height:26px;border-radius:7px;border:1px solid #232e3c;color:#cbd5e1;display:grid;place-items:center;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600" style-hover="border-color:#3a4657;background:#18212c">{{ hops }}</div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#8b97ab">HOPS</span>
+          </div>
+        </div>
+        <div ref="{{ refL }}" onContextMenu="{{ noCtx }}" style="flex:1;min-height:440px;position:relative;overflow:hidden;background-image:radial-gradient(#182230 1px, transparent 1px);background-size:26px 26px"></div>
+      </div>
+
+      <div style="flex:none;width:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+        <div style="flex:1;width:1px;background:linear-gradient(#0000,#232e3c)"></div>
+        <div onClick="{{ toggleLink }}" title="{{ linkTitle }}" style="{{ linkBtnStyle }}">
+          <sc-if value="{{ linked }}" hint-placeholder-val="{{ true }}">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7.5 12.5 L12.5 7.5"></path><path d="M4.5 9 L3 10.5 a3.5 3.5 0 0 0 5 5 L9.5 14"></path><path d="M10.5 6 L12 4.5 a3.5 3.5 0 0 1 5 5 L15.5 11"></path></svg>
+          </sc-if>
+          <sc-if value="{{ notLinked }}">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4.5 9 L3 10.5 a3.5 3.5 0 0 0 5 5 L9.5 14"></path><path d="M10.5 6 L12 4.5 a3.5 3.5 0 0 1 5 5 L15.5 11"></path><path d="M6.5 3.5 L13.5 16.5" stroke="#f87171"></path></svg>
+          </sc-if>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:#58657a;text-align:center;width:62px;line-height:1.35">{{ linkCaption }}</div>
+        <div style="flex:1;width:1px;background:linear-gradient(#232e3c,#0000)"></div>
+      </div>
+
+      <div style="flex:1;min-width:0;border:1px solid #2d5680;border-radius:10px;background:#0d1219;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 0 1px #60a5fa10">
+        <div style="display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid #18212c">
+          <svg width="15" height="15" viewBox="0 0 17 17" fill="none" stroke="#60a5fa" stroke-width="1.5"><circle cx="8.5" cy="8.5" r="6.8"></circle><circle cx="8.5" cy="8.5" r="2.4" fill="#60a5fa" stroke="none"></circle></svg>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.1em;color:#60a5fa;font-weight:600">END-CENTRIC SUBGRAPH</span>
+          <div style="flex:1"></div>
+          <div onClick="{{ addRight }}" title="New blank node" style="width:26px;height:26px;border-radius:7px;border:1px solid #2d5680;background:#60a5fa0f;color:#60a5fa;display:grid;place-items:center;cursor:pointer;font-size:17px;line-height:1;padding-bottom:2px" style-hover="background:#60a5fa24">+</div>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div onClick="{{ cycleHops }}" title="Hop depth — click to cycle 2 / 3 / 4" style="width:26px;height:26px;border-radius:7px;border:1px solid #232e3c;color:#cbd5e1;display:grid;place-items:center;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600" style-hover="border-color:#3a4657;background:#18212c">{{ hops }}</div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#8b97ab">HOPS</span>
+          </div>
+        </div>
+        <div ref="{{ refR }}" onContextMenu="{{ noCtx }}" style="flex:1;min-height:440px;position:relative;overflow:hidden;background-image:radial-gradient(#182230 1px, transparent 1px);background-size:26px 26px"></div>
+      </div>
+    </div>
+
+    <div style="border:1px solid #2f6b45;border-radius:10px;background:#0e141d;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:1px solid #18212c">
+        <svg width="15" height="15" viewBox="0 0 17 17" fill="none" stroke="#8b97ab" stroke-width="1.5"><path d="M2 15 L7 10"></path><path d="M9 8 L15 2 M11.5 1.5 L15.5 5.5 L13.5 7.5 L9.5 3.5 Z" fill="#8b97ab"></path></svg>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.12em;color:#8b97ab;font-weight:600">RELATION EDITOR / ACTION BAR</span>
+        <div style="flex:1"></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#58657a">{{ selCaption }}</span>
+      </div>
+      <div style="max-height:190px;overflow:auto">
+        <sc-if value="{{ noSel }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:20px 16px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#4b5769;line-height:1.8">
+            Left-click a node to list all of its relations &nbsp;·&nbsp; left-click an edge for a single relation<br>
+            Double-click a node to re-center the panel on it &nbsp;·&nbsp; right-click a node or edge to edit it
+          </div>
+        </sc-if>
+        <sc-for list="{{ rows }}" as="row" hint-placeholder-count="2">
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid #151d27" style-hover="background:#121a24">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#3f4b5c;width:22px;flex:none">{{ row.num }}</span>
+            <div style="flex:1;min-width:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:13px">
+              <span style="color:{{ row.srcColor }}">{{ row.srcLabel }}</span>
+              <span style="color:#3f4b5c">════</span>
+              <span style="padding:3px 11px;border-radius:6px;border:1px solid #b4781e;background:#f59e0b12;color:#f0b046;font-size:12.5px">{{ row.label }}</span>
+              <span style="color:#3f4b5c">════▶</span>
+              <span style="color:{{ row.tgtColor }}">{{ row.tgtLabel }}</span>
+            </div>
+            <div onClick="{{ row.onEdit }}" style="flex:none;display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:7px;border:1px solid #2f6b45;color:#4ade80;font-size:12.5px;cursor:pointer" style-hover="background:#4ade8016">Edit</div>
+            <div onClick="{{ row.onReverse }}" style="flex:none;display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:7px;border:1px solid #2d5680;color:#60a5fa;font-size:12.5px;cursor:pointer" style-hover="background:#60a5fa16">⇄ Reverse</div>
+            <div onClick="{{ row.onDelete }}" style="flex:none;display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:7px;border:1px solid #7f3030;color:#f87171;font-size:12.5px;cursor:pointer" style-hover="background:#f8717116">Delete</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{ edit }}">
+    <div style="position:fixed;inset:0;z-index:50;background:#040609b8;display:grid;place-items:center;padding:24px">
+      <div style="width:min(460px,100%);border-radius:12px;background:#0f151e;border:1px solid #242f3d;box-shadow:0 24px 60px #0009;overflow:hidden">
+        <div style="padding:14px 18px;border-bottom:1px solid #1c2431;display:flex;align-items:center;gap:10px">
+          <span style="font-size:15px;font-weight:600">{{ editTitle }}</span>
+          <div style="flex:1"></div>
+          <div onClick="{{ closeEdit }}" style="cursor:pointer;color:#58657a;font-size:18px;line-height:1">×</div>
+        </div>
+        <div style="padding:16px 18px;display:flex;flex-direction:column;gap:13px">
+          <sc-for list="{{ editFields }}" as="f" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:#8b97ab">{{ f.label }}</label>
+              <input value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" style="width:100%;box-sizing:border-box;padding:9px 11px;border-radius:8px;background:#0b1017;border:1px solid #253141;color:#e2e8f0;font-size:13.5px;font-family:'IBM Plex Sans',sans-serif;outline:none" style-focus="border-color:#4ade80" />
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:13px 18px;border-top:1px solid #1c2431;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <sc-if value="{{ editIsNode }}">
+            <div onClick="{{ editDelete }}" style="padding:8px 14px;border-radius:8px;border:1px solid #7f3030;color:#f87171;font-size:13px;cursor:pointer" style-hover="background:#f8717116">Delete node</div>
+          </sc-if>
+          <sc-if value="{{ editIsNode }}">
+            <div onClick="{{ editCenter }}" style="padding:8px 14px;border-radius:8px;border:1px solid #2b3543;color:#cbd5e1;font-size:13px;cursor:pointer" style-hover="background:#18212c">Expand as center</div>
+          </sc-if>
+          <sc-if value="{{ editIsEdge }}">
+            <div onClick="{{ editDeleteEdge }}" style="padding:8px 14px;border-radius:8px;border:1px solid #7f3030;color:#f87171;font-size:13px;cursor:pointer" style-hover="background:#f8717116">Delete relation</div>
+          </sc-if>
+          <sc-if value="{{ editIsEdge }}">
+            <div onClick="{{ editReverse }}" style="padding:8px 14px;border-radius:8px;border:1px solid #2d5680;color:#60a5fa;font-size:13px;cursor:pointer" style-hover="background:#60a5fa16">⇄ Reverse</div>
+          </sc-if>
+          <div style="flex:1"></div>
+          <div onClick="{{ closeEdit }}" style="padding:8px 16px;border-radius:8px;border:1px solid #2b3543;color:#cbd5e1;font-size:13px;cursor:pointer" style-hover="background:#18212c">Cancel</div>
+          <div onClick="{{ saveEdit }}" style="padding:8px 20px;border-radius:8px;background:#4ade80;color:#062012;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#6ee79a">Save</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ confirm }}">
+    <div style="position:fixed;inset:0;z-index:60;background:#040609c4;display:grid;place-items:center;padding:24px">
+      <div style="width:min(420px,100%);border-radius:12px;background:#0f151e;border:1px solid #3a2430;box-shadow:0 24px 60px #0009;padding:20px">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:30px;height:30px;flex:none;border-radius:50%;background:#f8717118;border:1px solid #7f3030;display:grid;place-items:center;color:#f87171;font-size:16px;font-weight:700">!</div>
+          <div style="min-width:0">
+            <div style="font-size:15px;font-weight:600;margin-bottom:6px">{{ confirmTitle }}</div>
+            <div style="font-size:13px;color:#8b97ab;line-height:1.65">{{ confirmBody }}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
+          <div onClick="{{ closeConfirm }}" style="padding:8px 16px;border-radius:8px;border:1px solid #2b3543;color:#cbd5e1;font-size:13px;cursor:pointer" style-hover="background:#18212c">Cancel</div>
+          <div onClick="{{ doConfirm }}" style="padding:8px 20px;border-radius:8px;background:#dc4c4c;color:#fff;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#e86a6a">Delete</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}">
+    <div style="position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:70;padding:10px 18px;border-radius:9px;background:#0f151e;border:1px solid #2b3543;color:#cbd5e1;font-family:'IBM Plex Mono',monospace;font-size:12.5px;box-shadow:0 12px 30px #0009">{{ toast }}</div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const SEED_NODES = [
+  { id: 'a101', label: 'A101 System', type: 'Core Server', desc: 'Frontend app tier for production servers and production services.' },
+  { id: 'auth', label: 'User Auth Service', type: 'User', desc: 'Issues and validates session tokens for all edge traffic.' },
+  { id: 'cache', label: 'Cache Instance A', type: 'Gateway D0', desc: 'Hot key cache fronting the gateway read path.' },
+  { id: 'log1', label: 'Log Collector 01', type: 'Log Chart', desc: 'Ships structured logs from the production fleet.' },
+  { id: 'log2', label: 'Metrics Agent 02', type: 'Telemetry', desc: 'Scrapes host and runtime metrics every 15s.' },
+  { id: 'appc', label: 'Application C', type: 'Service', desc: 'Order orchestration service, owns the write path.' },
+  { id: 'gwd', label: 'Gateway D', type: 'Gateway', desc: 'Data access gateway in front of the primary store.' },
+  { id: 'dbb', label: 'Database B', type: 'Relational DB', desc: 'Primary operational database for the post pipeline.' },
+  { id: 'bk1', label: 'Backup Cluster B1', type: 'Relational DB', desc: 'Daily full backup target for the primary database.' },
+  { id: 'dba', label: 'DBA Admin Group', type: 'DBA', desc: 'On-call owners for schema and operational changes.' },
+  { id: 'vault', label: 'Data Vault 002', type: 'Storage', desc: 'Long-term columnar store for audited records.' },
+  { id: 'etl', label: 'ETL Pipeline', type: 'Job', desc: 'Nightly extract and load into the reporting layer.' },
+  { id: 'rep', label: 'Reporting Service', type: 'Service', desc: 'Serves dashboards to internal analysts.' },
+  { id: 'obj', label: 'Object Store', type: 'Storage', desc: 'Cold archive bucket with 7-year retention.' }
+];
+
+const SEED_EDGES = [
+  ['a101', 'auth', 'invokes'], ['a101', 'cache', 'depends_on'], ['a101', 'log1', 'monitored_by'],
+  ['a101', 'log2', 'monitored_by'], ['a101', 'appc', 'writes'], ['auth', 'appc', 'authorizes'],
+  ['cache', 'gwd', 'caches'], ['appc', 'gwd', 'reads'], ['gwd', 'dbb', 'stores'],
+  ['dbb', 'bk1', 'replicates'], ['dbb', 'dba', 'managed_by'], ['dbb', 'vault', 'managed_by'],
+  ['vault', 'etl', 'feeds'], ['etl', 'rep', 'exports'], ['bk1', 'obj', 'archives']
+];
+
+const DOMAIN_OF = {
+  'Core Server': 'Applications', 'Service': 'Applications', 'Job': 'Applications',
+  'Relational DB': 'Data Stores', 'Storage': 'Data Stores',
+  'Gateway': 'Network', 'Gateway D0': 'Network',
+  'Log Chart': 'Observability', 'Telemetry': 'Observability',
+  'User': 'Identity', 'DBA': 'Identity'
+};
+const domainOf = (n) => DOMAIN_OF[n.type] || 'Uncategorized';
+
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const clip = (s, n) => { s = String(s || ''); return s.length > n ? s.slice(0, n - 1) + '…' : s; };
+
+class Component extends DCLogic {
+  state = {
+    nodes: SEED_NODES.map((n) => Object.assign({}, n)),
+    edges: SEED_EDGES.map((e, i) => ({ id: 'e' + i, source: e[0], target: e[1], label: e[2] })),
+    startId: 'a101',
+    endId: 'dbb',
+    qStart: 'A101 System',
+    qEnd: 'Database B',
+    hops: 2,
+    sel: null,
+    ctx: null,
+    edit: null,
+    confirm: null,
+    toast: null,
+    hint: '',
+    open: null,
+    hl: null,
+    collapsed: {}
+  };
+
+  constructor(props) {
+    super(props);
+    this.refL = React.createRef();
+    this.refR = React.createRef();
+    this._g = {};
+    this._keys = {};
+    this._seq = 1;
+  }
+
+  componentDidMount() {
+    this._mounted = true;
+    this._wait = setInterval(() => {
+      if (window.G6 && this.refL.current) { clearInterval(this._wait); this.syncAll(); }
+    }, 80);
+    this._onKey = (e) => { if (e.key === 'Escape') this.setState({ ctx: null, edit: null, confirm: null }); };
+    window.addEventListener('keydown', this._onKey);
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
+    clearInterval(this._wait);
+    window.removeEventListener('keydown', this._onKey);
+    ['L', 'R'].forEach((s) => { try { this._g[s] && this._g[s].destroy(); } catch (err) {} });
+  }
+
+  componentDidUpdate() { this.syncAll(); this.paintSel(); }
+
+  // ---------- data helpers ----------
+  node(id) { return this.state.nodes.find((n) => n.id === id); }
+  edge(id) { return this.state.edges.find((e) => e.id === id); }
+  labelOf(id) { const n = this.node(id); return n ? n.label : id; }
+
+  neighborhood(centerId, hops) {
+    if (!this.node(centerId)) return { nodes: [], edges: [] };
+    const dist = { [centerId]: 0 };
+    let frontier = [centerId];
+    for (let h = 0; h < hops; h++) {
+      const next = [];
+      frontier.forEach((id) => {
+        this.state.edges.forEach((e) => {
+          [[e.source, e.target], [e.target, e.source]].forEach((p) => {
+            if (p[0] === id && dist[p[1]] === undefined) { dist[p[1]] = h + 1; next.push(p[1]); }
+          });
+        });
+      });
+      frontier = next;
+    }
+    const ids = Object.keys(dist);
+    return {
+      nodes: ids.map((id) => this.node(id)).filter(Boolean),
+      edges: this.state.edges.filter((e) => dist[e.source] !== undefined && dist[e.target] !== undefined)
+    };
+  }
+
+  shortestPath(a, b) {
+    if (!this.node(a) || !this.node(b)) return null;
+    if (a === b) return [{ id: a }];
+    const prev = {}, seen = { [a]: 1 };
+    let q = [a];
+    while (q.length) {
+      const next = [];
+      for (const id of q) {
+        for (const e of this.state.edges) {
+          let nb = null;
+          if (e.source === id) nb = e.target; else if (e.target === id) nb = e.source;
+          if (nb && !seen[nb]) {
+            seen[nb] = 1; prev[nb] = { from: id, edge: e };
+            if (nb === b) {
+              const out = []; let cur = b;
+              while (cur !== a) { const p = prev[cur]; out.unshift({ id: cur, edge: p.edge }); cur = p.from; }
+              out.unshift({ id: a }); return out;
+            }
+            next.push(nb);
+          }
+        }
+      }
+      q = next;
+    }
+    return null;
+  }
+
+  linkEdge() {
+    const { startId, endId } = this.state;
+    return this.state.edges.find((e) => (e.source === startId && e.target === endId) || (e.source === endId && e.target === startId));
+  }
+
+  toast(msg) {
+    clearTimeout(this._t);
+    this.setState({ toast: msg });
+    this._t = setTimeout(() => this._mounted && this.setState({ toast: null }), 2200);
+  }
+
+  // ---------- graph rendering ----------
+  accent(side) { return side === 'L' ? '#4ade80' : '#60a5fa'; }
+
+  cardHTML(n, side, isCenter) {
+    const a = this.accent(side);
+    return '<div data-node-id="' + esc(n.id) + '" data-center="' + (isCenter ? '1' : '0') + '" style="width:184px;height:112px;box-sizing:border-box;padding:9px 11px;border-radius:9px;background:#121924;border:1px solid ' + (isCenter ? a : '#2b3543') + ';font-family:\'IBM Plex Sans\',sans-serif;cursor:pointer;overflow:hidden;user-select:none;box-shadow:' + (isCenter ? '0 0 0 2px ' + a + ',0 0 26px ' + a + '40' : '0 2px 10px #00000066') + '">' +
+      '<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">' +
+        '<span style="width:8px;height:8px;flex:none;border-radius:2px;background:' + a + '"></span>' +
+        '<span style="color:' + (isCenter ? a : '#e2e8f0') + ';font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(isCenter ? n.label + ' ★' : n.label) + '</span>' +
+      '</div>' +
+      '<div style="display:flex;gap:5px;font-size:12px;line-height:1.4;margin-bottom:3px"><span style="color:#7d8b9f;flex:none">Type:</span><span style="color:#cbd5e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(n.type || '—') + '</span></div>' +
+      '<div style="display:flex;gap:5px;font-size:12px;line-height:1.4;max-height:34px;overflow:hidden"><span style="color:#7d8b9f;flex:none">Desc:</span><span style="color:#9aa7b9;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">' + esc(n.desc || '—') + '</span></div>' +
+    '</div>';
+  }
+
+  syncAll() { this.syncGraph('L'); this.syncGraph('R'); }
+
+  syncGraph(side) {
+    const G6 = window.G6;
+    const el = (side === 'L' ? this.refL : this.refR).current;
+    if (!G6 || !el) return;
+    const center = side === 'L' ? this.state.startId : this.state.endId;
+    const sub = this.neighborhood(center, this.state.hops);
+    const key = JSON.stringify([center, this.state.hops, sub.nodes, sub.edges]);
+    if (this._keys[side] === key) return;
+    this._keys[side] = key;
+
+    if (this._g[side]) { try { this._g[side].destroy(); } catch (e) {} this._g[side] = null; }
+    el.innerHTML = '';
+    if (!sub.nodes.length) return;
+
+    const a = this.accent(side);
+    const self = this;
+    const data = {
+      nodes: sub.nodes.map((n) => ({ id: n.id, data: Object.assign({}, n, { center: n.id === center }) })),
+      edges: sub.edges.map((e) => ({ id: e.id, source: e.source, target: e.target, data: { label: e.label } }))
+    };
+
+    let g;
+    try {
+      g = new G6.Graph({
+        container: el,
+        autoResize: true,
+        padding: 24,
+        data: data,
+        node: {
+          type: 'html',
+          style: {
+            size: [184, 112],
+            innerHTML: (d) => self.cardHTML(d.data, side, !!d.data.center)
+          }
+        },
+        edge: {
+          type: 'line',
+          style: {
+            stroke: a,
+            lineWidth: 1.4,
+            endArrow: true,
+            endArrowSize: 9,
+            labelText: (d) => (d.data && d.data.label) || '',
+            labelFill: '#c3cedd',
+            labelFontSize: 12,
+            labelFontFamily: 'IBM Plex Mono, monospace',
+            labelBackground: true,
+            labelBackgroundFill: '#0b1017',
+            labelBackgroundFillOpacity: 1,
+            labelBackgroundStroke: '#232e3c',
+            labelBackgroundLineWidth: 1,
+            labelBackgroundRadius: 4,
+            labelBackgroundPadding: [3, 7, 3, 7],
+            labelAutoRotate: false,
+            labelPlacement: (d) => {
+              let h = 0; const id = String(d.id || '');
+              for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 3;
+              return [0.34, 0.5, 0.66][h];
+            },
+            labelPadding: 4
+          },
+          state: { selected: { stroke: '#f59e0b', lineWidth: 2.6, labelFill: '#f0b046' } }
+        },
+        layout: {
+          type: 'd3-force',
+          preventOverlap: true,
+          nodeSize: [184, 112],
+          link: { distance: 260, strength: 0.85 },
+          manyBody: { strength: -520 },
+          collide: { radius: 118, strength: 1, iterations: 10 },
+          center: { x: 0, y: 0 },
+          iterations: 300,
+          animation: false
+        },
+        behaviors: ['drag-canvas', 'zoom-canvas', 'drag-element']
+      });
+      const clamp = async () => {
+        try { await g.zoomTo(0.92); } catch (e) {}
+        try { await g.focusElement(center); } catch (e) {}
+        await new Promise((r) => setTimeout(r, 140));
+        try {
+          const cards = [].slice.call(el.querySelectorAll('[data-node-id]'));
+          if (cards.length > 1) {
+            const rs = cards.map((c) => c.getBoundingClientRect());
+            const w = Math.max.apply(null, rs.map((r) => r.right)) - Math.min.apply(null, rs.map((r) => r.left));
+            const h = Math.max.apply(null, rs.map((r) => r.bottom)) - Math.min.apply(null, rs.map((r) => r.top));
+            const pr = el.getBoundingClientRect();
+            const k = Math.min((pr.width - 20) / w, (pr.height - 20) / h, 1);
+            const target = Math.max(0.78, 0.92 * k);
+            if (Math.abs(target - 0.92) > 0.02) {
+              try { await g.zoomTo(target); } catch (e) {}
+              try { await g.focusElement(center); } catch (e) {}
+            }
+          }
+        } catch (e) {}
+      };
+      g.render().then(() => clamp()).catch(() => {});
+      g.on('afterresize', () => { clearTimeout(this._rt); this._rt = setTimeout(clamp, 200); });
+    } catch (err) { console.warn('graph init failed', err); return; }
+
+    this._g[side] = g;
+
+    g.on('edge:click', (ev) => { const id = ev.target && ev.target.id; if (id) this.select({ side: side, kind: 'edge', id: id }); });
+    g.on('edge:contextmenu', (ev) => {
+      const id = ev.target && ev.target.id; if (!id) return;
+      this.setState({ sel: { side: side, kind: 'edge', id: id } });
+      this.openEdit('edge', id, side);
+    });
+    g.on('canvas:click', () => this.setState({ sel: null, ctx: null }));
+
+    el.addEventListener('click', (ev) => {
+      const t = ev.target.closest && ev.target.closest('[data-node-id]');
+      if (t) this.select({ side: side, kind: 'node', id: t.dataset.nodeId });
+    });
+    el.addEventListener('dblclick', (ev) => {
+      const t = ev.target.closest && ev.target.closest('[data-node-id]');
+      if (t) this.recenter(side, t.dataset.nodeId);
+    });
+    el.addEventListener('contextmenu', (ev) => {
+      const t = ev.target.closest && ev.target.closest('[data-node-id]');
+      if (!t) return;
+      ev.preventDefault(); ev.stopPropagation();
+      this.setState({ sel: { side: side, kind: 'node', id: t.dataset.nodeId } });
+      this.openEdit('node', t.dataset.nodeId, side);
+    });
+    setTimeout(() => this.paintSel(), 60);
+  }
+
+  pagePoint(ev) {
+    const n = ev.nativeEvent || ev;
+    return { x: n.clientX || 200, y: n.clientY || 200 };
+  }
+
+  paintSel() {
+    ['L', 'R'].forEach((side) => {
+      const el = (side === 'L' ? this.refL : this.refR).current;
+      if (!el) return;
+      const a = this.accent(side);
+      const sel = this.state.sel;
+      el.querySelectorAll('[data-node-id]').forEach((card) => {
+        const on = sel && sel.kind === 'node' && sel.side === side && sel.id === card.dataset.nodeId;
+        if (on) { card.style.borderColor = '#f59e0b'; card.style.boxShadow = '0 0 0 2px #f59e0b,0 0 24px #f59e0b33'; }
+        else {
+          const isC = card.dataset.center === '1';
+          card.style.borderColor = isC ? a : '#2b3543';
+          card.style.boxShadow = isC ? '0 0 0 2px ' + a + ',0 0 26px ' + a + '40' : '0 2px 10px #00000066';
+        }
+      });
+      const g = this._g[side];
+      if (g) {
+        const map = {};
+        this.state.edges.forEach((e) => { map[e.id] = []; });
+        if (sel && sel.kind === 'edge' && sel.side === side) map[sel.id] = ['selected'];
+        try { g.setElementState(map); } catch (e) {}
+      }
+    });
+  }
+
+  // ---------- actions ----------
+  select(sel) { this.setState({ sel: sel, ctx: null }); }
+
+  recenter(side, id) {
+    const n = this.node(id); if (!n) return;
+    if (side === 'L') this.setState({ startId: id, qStart: n.label, sel: null, ctx: null });
+    else this.setState({ endId: id, qEnd: n.label, sel: null, ctx: null });
+    this.toast('Re-centered on ' + n.label);
+  }
+
+  doSearch(side) {
+    const q = (side === 'L' ? this.state.qStart : this.state.qEnd).trim().toLowerCase();
+    if (!q) return;
+    const hit = this.state.nodes.find((n) => n.label.toLowerCase() === q) || this.state.nodes.find((n) => n.label.toLowerCase().indexOf(q) >= 0);
+    if (!hit) { this.setState({ hint: 'No node matched "' + q + '"' }); return; }
+    this.setState({ hint: '' });
+    this.recenter(side, hit.id);
+  }
+
+  addBlank(side) {
+    const id = 'n' + Date.now().toString(36) + (this._seq++);
+    const n = { id: id, label: 'New Node ' + this._seq, type: '', desc: '' };
+    const nodes = this.state.nodes.concat([n]);
+    const patch = { nodes: nodes, sel: { side: side, kind: 'node', id: id }, edit: { kind: 'node', id: id, draft: Object.assign({}, n) } };
+    if (side === 'L') { patch.startId = id; patch.qStart = n.label; } else { patch.endId = id; patch.qEnd = n.label; }
+    this.setState(patch);
+  }
+
+  toggleLink() {
+    const { startId, endId } = this.state;
+    if (startId === endId) { this.toast('Start and End are the same node'); return; }
+    const ex = this.linkEdge();
+    if (ex) {
+      this.setState({ edges: this.state.edges.filter((e) => e.id !== ex.id), sel: null });
+      this.toast('Unlinked ' + this.labelOf(startId) + ' ↔ ' + this.labelOf(endId));
+    } else {
+      const e = { id: 'e' + Date.now().toString(36), source: startId, target: endId, label: 'related_to' };
+      this.setState({ edges: this.state.edges.concat([e]), sel: { side: 'L', kind: 'edge', id: e.id }, edit: { kind: 'edge', id: e.id, draft: { label: e.label } } });
+    }
+  }
+
+  openEdit(kind, id, side) {
+    const sd = side || (this.state.sel && this.state.sel.side) || 'L';
+    if (kind === 'node') { const n = this.node(id); if (n) this.setState({ ctx: null, edit: { kind: 'node', id: id, side: sd, draft: Object.assign({}, n) } }); }
+    else { const e = this.edge(id); if (e) this.setState({ ctx: null, edit: { kind: 'edge', id: id, side: sd, draft: { label: e.label } } }); }
+  }
+
+  saveEdit() {
+    const ed = this.state.edit; if (!ed) return;
+    if (ed.kind === 'node') {
+      const nodes = this.state.nodes.map((n) => (n.id === ed.id ? Object.assign({}, n, { label: ed.draft.label || n.label, type: ed.draft.type, desc: ed.draft.desc }) : n));
+      const patch = { nodes: nodes, edit: null };
+      if (ed.id === this.state.startId) patch.qStart = ed.draft.label;
+      if (ed.id === this.state.endId) patch.qEnd = ed.draft.label;
+      this.setState(patch);
+    } else {
+      this.setState({ edges: this.state.edges.map((e) => (e.id === ed.id ? Object.assign({}, e, { label: ed.draft.label || e.label }) : e)), edit: null });
+    }
+    this.toast('Saved');
+  }
+
+  reverseEdge(id) {
+    this.setState({ edges: this.state.edges.map((e) => (e.id === id ? Object.assign({}, e, { source: e.target, target: e.source }) : e)), ctx: null });
+    this.toast('Direction reversed');
+  }
+
+  deleteEdge(id) {
+    this.setState({ edges: this.state.edges.filter((e) => e.id !== id), sel: null, ctx: null });
+    this.toast('Relation deleted');
+  }
+
+  askDeleteNode(id) {
+    const count = this.state.edges.filter((e) => e.source === id || e.target === id).length;
+    this.setState({ ctx: null, edit: null, confirm: { kind: 'node', id: id, count: count } });
+  }
+
+  runConfirm() {
+    const c = this.state.confirm; if (!c) return;
+    const id = c.id;
+    const nodes = this.state.nodes.filter((n) => n.id !== id);
+    const edges = this.state.edges.filter((e) => e.source !== id && e.target !== id);
+    const patch = { nodes: nodes, edges: edges, confirm: null, sel: null };
+    if (this.state.startId === id) { const f = nodes[0]; patch.startId = f ? f.id : null; patch.qStart = f ? f.label : ''; }
+    if (this.state.endId === id) { const f = nodes[nodes.length - 1]; patch.endId = f ? f.id : null; patch.qEnd = f ? f.label : ''; }
+    this.setState(patch);
+    this.toast('Node and ' + c.count + ' relation(s) deleted');
+  }
+
+  // ---------- tree picker ----------
+  matchedNodes(side) {
+    const q = (side === 'L' ? this.state.qStart : this.state.qEnd).trim().toLowerCase();
+    if (!q) return this.state.nodes.slice();
+    return this.state.nodes.filter((n) =>
+      n.label.toLowerCase().indexOf(q) >= 0 ||
+      String(n.type || '').toLowerCase().indexOf(q) >= 0 ||
+      domainOf(n).toLowerCase().indexOf(q) >= 0
+    );
+  }
+
+  treeRows(side) {
+    const searching = !!(side === 'L' ? this.state.qStart : this.state.qEnd).trim();
+    const accent = this.accent(side);
+    const hl = this.state.hl;
+    const list = this.matchedNodes(side);
+    const doms = {};
+    list.forEach((n) => {
+      const d = domainOf(n), t = n.type || '(no type)';
+      (doms[d] = doms[d] || {})[t] = (doms[d][t] || []).concat([n]);
+    });
+    const isOpen = (k) => searching || this.state.collapsed[k] !== true;
+    const rowStyle = (depth, kind, on) =>
+      'display:flex;align-items:center;gap:7px;padding:' + (kind === 'node' ? '7px 9px' : '6px 9px') +
+      ';padding-left:' + (9 + depth * 15) + 'px;border-radius:6px;cursor:pointer;font-size:' +
+      (kind === 'node' ? '13px' : '11.5px') + ';' +
+      (kind === 'node'
+        ? 'color:' + (on ? accent : '#e2e8f0') + ';background:' + (on ? '#18212c' : 'transparent')
+        : 'color:#8b97ab;font-family:\'IBM Plex Mono\',monospace;letter-spacing:.06em');
+    const rows = [];
+    Object.keys(doms).sort().forEach((d) => {
+      const dk = 'd:' + d;
+      const dOpen = isOpen(dk);
+      const total = Object.keys(doms[d]).reduce((a, t) => a + doms[d][t].length, 0);
+      rows.push({
+        key: dk, caret: dOpen ? '▾' : '▸', label: d.toUpperCase(), meta: String(total),
+        style: rowStyle(0, 'group', false),
+        onClick: () => this.setState((s) => ({ collapsed: Object.assign({}, s.collapsed, { [dk]: !!isOpen(dk) }) }))
+      });
+      if (!dOpen) return;
+      Object.keys(doms[d]).sort().forEach((t) => {
+        const tk = 'd:' + d + '|t:' + t;
+        const tOpen = isOpen(tk);
+        rows.push({
+          key: tk, caret: tOpen ? '▾' : '▸', label: t, meta: String(doms[d][t].length),
+          style: rowStyle(1, 'group', false),
+          onClick: () => this.setState((s) => ({ collapsed: Object.assign({}, s.collapsed, { [tk]: !!isOpen(tk) }) }))
+        });
+        if (!tOpen) return;
+        doms[d][t].forEach((n) => {
+          rows.push({
+            key: 'n:' + n.id, caret: '·', label: n.label, meta: clip(n.desc, 22),
+            node: n.id,
+            style: rowStyle(2, 'node', hl === n.id),
+            onClick: () => this.pick(side, n.id)
+          });
+        });
+      });
+    });
+    return rows;
+  }
+
+  pick(side, id) {
+    const n = this.node(id); if (!n) return;
+    this.setState({ open: null, hl: null, hint: '' });
+    this.recenter(side, id);
+  }
+
+  navList(side) { return this.treeRows(side).filter((r) => r.node).map((r) => r.node); }
+
+  onPickerKey(side, e) {
+    const ids = this.navList(side);
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!ids.length) return;
+      const i = ids.indexOf(this.state.hl);
+      const next = e.key === 'ArrowDown' ? (i + 1) % ids.length : (i <= 0 ? ids.length - 1 : i - 1);
+      this.setState({ open: side, hl: ids[next] });
+    } else if (e.key === 'Enter') {
+      const target = this.state.hl && ids.indexOf(this.state.hl) >= 0 ? this.state.hl : ids[0];
+      if (target) this.pick(side, target); else this.doSearch(side);
+    } else if (e.key === 'Escape') {
+      this.setState({ open: null, hl: null });
+    } else {
+      this.setState({ open: side });
+    }
+  }
+
+  // ---------- derived ----------
+  relationRows() {
+    const sel = this.state.sel;
+    if (!sel) return [];
+    const list = sel.kind === 'edge'
+      ? this.state.edges.filter((e) => e.id === sel.id)
+      : this.state.edges.filter((e) => e.source === sel.id || e.target === sel.id);
+    return list.map((e, i) => ({
+      num: String(i + 1).padStart(2, '0'),
+      label: e.label,
+      srcLabel: '[' + this.labelOf(e.source) + ']',
+      tgtLabel: '[' + this.labelOf(e.target) + ']',
+      srcColor: e.source === this.state.startId ? '#4ade80' : e.source === this.state.endId ? '#60a5fa' : '#cbd5e1',
+      tgtColor: e.target === this.state.startId ? '#4ade80' : e.target === this.state.endId ? '#60a5fa' : '#cbd5e1',
+      onEdit: () => this.openEdit('edge', e.id),
+      onReverse: () => this.reverseEdge(e.id),
+      onDelete: () => this.deleteEdge(e.id)
+    }));
+  }
+
+  pathSegments() {
+    const p = this.shortestPath(this.state.startId, this.state.endId);
+    if (!p) return [];
+    return p.map((s, i) => {
+      const isStart = s.id === this.state.startId;
+      const isEnd = s.id === this.state.endId;
+      const c = isStart ? '#4ade80' : isEnd ? '#60a5fa' : '#cbd5e1';
+      const bd = isStart ? '#2f6b45' : isEnd ? '#2d5680' : '#232e3c';
+      return {
+        arrow: i === 0 ? '' : '──(' + s.edge.label + ')──▶',
+        label: '[' + this.labelOf(s.id) + ']',
+        style: 'padding:3px 9px;border-radius:6px;border:1px solid ' + bd + ';color:' + c + ';cursor:pointer;user-select:none;white-space:nowrap',
+        onClick: () => this.recenter('L', s.id),
+        onCtx: (ev) => { ev.preventDefault(); this.recenter('R', s.id); }
+      };
+    });
+  }
+
+  editFieldsFor() {
+    const ed = this.state.edit;
+    if (!ed) return [];
+    const set = (k) => (e) => { const v = e.target.value; this.setState((s) => ({ edit: Object.assign({}, s.edit, { draft: Object.assign({}, s.edit.draft, { [k]: v }) }) })); };
+    if (ed.kind === 'edge') {
+      const e = this.edge(ed.id) || {};
+      return [{ label: 'RELATION LABEL · [' + this.labelOf(e.source) + '] ▶ [' + this.labelOf(e.target) + ']', value: ed.draft.label || '', placeholder: 'e.g. depends_on', onChange: set('label') }];
+    }
+    return [
+      { label: 'TITLE', value: ed.draft.label || '', placeholder: 'Node name', onChange: set('label') },
+      { label: 'TYPE', value: ed.draft.type || '', placeholder: 'e.g. Relational DB', onChange: set('type') },
+      { label: 'DESCRIPTION', value: ed.draft.desc || '', placeholder: 'What this entity is', onChange: set('desc') }
+    ];
+  }
+
+  renderVals() {
+    const s = this.state;
+    const linked = !!this.linkEdge();
+    const ctx = s.ctx;
+    const sel = s.sel;
+    const rows = this.relationRows();
+    const cnt = s.confirm ? s.confirm.count : 0;
+
+    return {
+      refL: this.refL,
+      refR: this.refR,
+      qStart: s.qStart,
+      qEnd: s.qEnd,
+      hops: s.hops,
+      hint: s.hint,
+      toast: s.toast,
+      statLine: s.nodes.length + ' NODES · ' + s.edges.length + ' RELATIONS',
+      pathSegs: this.pathSegments(),
+      pathNone: this.pathSegments().length ? '' : 'No path found between [' + this.labelOf(s.startId) + '] and [' + this.labelOf(s.endId) + ']',
+
+      onQStart: (e) => this.setState({ qStart: e.target.value, open: 'L', hl: null }),
+      onQEnd: (e) => this.setState({ qEnd: e.target.value, open: 'R', hl: null }),
+      onStartKey: (e) => this.onPickerKey('L', e),
+      onEndKey: (e) => this.onPickerKey('R', e),
+      focusL: () => this.setState({ open: 'L' }),
+      focusR: () => this.setState({ open: 'R' }),
+      closePicker: () => this.setState({ open: null, hl: null }),
+      blurPicker: () => { clearTimeout(this._bt); this._bt = setTimeout(() => this._mounted && this.setState({ open: null, hl: null }), 200); },
+      openL: s.open === 'L',
+      openR: s.open === 'R',
+      rowsL: s.open === 'L' ? this.treeRows('L') : [],
+      rowsR: s.open === 'R' ? this.treeRows('R') : [],
+      emptyL: s.open === 'L' && !this.treeRows('L').length,
+      emptyR: s.open === 'R' && !this.treeRows('R').length,
+      searchStart: () => this.doSearch('L'),
+      searchEnd: () => this.doSearch('R'),
+      addLeft: () => this.addBlank('L'),
+      addRight: () => this.addBlank('R'),
+      cycleHops: () => this.setState({ hops: s.hops >= 4 ? 2 : s.hops + 1 }),
+      noCtx: (e) => e.preventDefault(),
+
+      linked: linked,
+      notLinked: !linked,
+      toggleLink: () => this.toggleLink(),
+      linkTitle: linked ? 'Remove the relation between Start and End' : 'Create a relation between Start and End',
+      linkCaption: linked ? 'LINKED — CLICK TO CUT' : 'NOT LINKED — CLICK TO JOIN',
+      linkBtnStyle: 'width:46px;height:46px;border-radius:50%;display:grid;place-items:center;cursor:pointer;transition:all .15s;' + (linked
+        ? 'background:#f59e0b1f;border:1px solid #f59e0b;color:#f0b046;box-shadow:0 0 22px #f59e0b33'
+        : 'background:#131a24;border:1px solid #2b3543;color:#8b97ab'),
+
+      noSel: !sel,
+      rows: rows,
+      selCaption: !sel ? 'NOTHING SELECTED' : sel.kind === 'edge' ? 'SELECTED LINK · 1 RELATION' : 'SELECTED NODE [' + this.labelOf(sel.id) + '] · ' + rows.length + ' RELATION(S)',
+
+      edit: !!s.edit,
+      editIsNode: !!s.edit && s.edit.kind === 'node',
+      editIsEdge: !!s.edit && s.edit.kind === 'edge',
+      editTitle: s.edit ? (s.edit.kind === 'node' ? 'Edit node · ' + this.labelOf(s.edit.id) : 'Edit relation') : '',
+      editCenter: () => { if (s.edit) { this.setState({ edit: null }); this.recenter(s.edit.side, s.edit.id); } },
+      editReverse: () => { if (s.edit) { this.reverseEdge(s.edit.id); this.setState({ edit: null }); } },
+      editDeleteEdge: () => { if (s.edit) { this.deleteEdge(s.edit.id); this.setState({ edit: null }); } },
+      editFields: this.editFieldsFor(),
+      closeEdit: () => this.setState({ edit: null }),
+      saveEdit: () => this.saveEdit(),
+      editDelete: () => s.edit && this.askDeleteNode(s.edit.id),
+
+      confirm: !!s.confirm,
+      confirmTitle: s.confirm ? 'Delete [' + this.labelOf(s.confirm.id) + ']?' : '',
+      confirmBody: s.confirm ? 'This removes the node and all ' + cnt + ' relation(s) attached to it. This cannot be undone.' : '',
+      closeConfirm: () => this.setState({ confirm: null }),
+      doConfirm: () => this.runConfirm()
+    };
+  }
+}
+
+</script>
+</body>
+</html>
