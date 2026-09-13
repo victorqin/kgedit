@@ -136,6 +136,7 @@ export const createGraphSlice: SliceCreator<GraphSlice> = (set, get) => ({
       get().loadSide('R'),
       get().loadPath(),
       get().loadStats(),
+      get().reloadLinks(),
     ])
   },
 })
