@@ -1,4 +1,4 @@
-// Task 6 会用真正的 MSW worker 替换这里。
-export const worker = {
-  start: async (_options?: unknown) => {},
-}
+import { setupWorker } from 'msw/browser'
+import { handlers } from './handlers'
+
+export const worker = setupWorker(...handlers)
