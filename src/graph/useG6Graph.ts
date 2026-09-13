@@ -103,9 +103,12 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
     }
 
     const onContextMenu = (ev: MouseEvent) => {
-      const hit = resolve(ev)
-      if (!hit) return
+      // 整个图区域内一律屏蔽浏览器右键菜单：右键在这里的语义是「打开编辑弹窗」，
+      // 无论点中的是节点、连线还是空白画布。图区域之外的右键行为不受影响。
       ev.preventDefault()
+
+      const hit = resolve(ev)
+      if (!hit) return // 连线由 G6 的 edge:contextmenu 处理，空白处只需屏蔽菜单
       ev.stopPropagation()
       handlersRef.current.onNodeContextMenu(hit.dataset.nodeId!)
     }

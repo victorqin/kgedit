@@ -53,6 +53,16 @@ export const createGraphSlice: SliceCreator<GraphSlice> = (set, get) => ({
       s[CENTER_KEY[side]] = id
     })
     await Promise.all([get().loadSide(side), get().loadPath()])
+
+    // 重新聚焦后输入框必须跟着走，否则会出现「框里写着 A、图上画着 B」的错位。
+    // 与 loadSide 里那次「仅当为空才回填」不同：那是为了从 URL 直接进入时补全，
+    // 这里是显式换中心，无论框里原本是什么都要覆盖。
+    const label = get()[SUB_KEY[side]]?.nodes.find((n) => n.id === id)?.label
+    if (label) {
+      set((s) => {
+        s[side === 'L' ? 'qStart' : 'qEnd'] = label
+      })
+    }
   },
 
   loadSide: async (side) => {

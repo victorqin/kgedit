@@ -39,7 +39,9 @@ export function GraphPanel({ side }: { side: Side }) {
     selection,
     handlers: {
       onNodeClick: (id) => void selectNode(side, id),
-      onNodeDblClick: (id) => void setCenter(side, id),
+      // 双击在重新聚焦的同时也选中该节点，下方关系列表随即列出它的全部关系。
+      // 两个请求互不依赖，并行发出。
+      onNodeDblClick: (id) => void Promise.all([setCenter(side, id), selectNode(side, id)]),
       onNodeContextMenu: (id) => {
         void selectNode(side, id)
         openNodeEditor(id, side)

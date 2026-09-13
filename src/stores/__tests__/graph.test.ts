@@ -139,3 +139,25 @@ describe('input backfill', () => {
     expect(s().qStart).toBe('my own text')
   })
 })
+
+describe('setCenter keeps the search box in sync', () => {
+  it('overwrites the search box with the new center label', async () => {
+    useKgStore.setState({ startId: 'a101', qStart: 'A101 System' })
+    await s().loadSide('L')
+    await s().setCenter('L', 'gwd')
+    expect(s().qStart).toBe('Gateway D')
+  })
+
+  it('does the same on the end side', async () => {
+    useKgStore.setState({ endId: 'dbb', qEnd: 'Database B' })
+    await s().loadSide('R')
+    await s().setCenter('R', 'bk1')
+    expect(s().qEnd).toBe('Backup Cluster B1')
+  })
+
+  it('leaves the other side alone', async () => {
+    useKgStore.setState({ startId: 'a101', qStart: 'A101 System', qEnd: 'Database B' })
+    await s().setCenter('L', 'gwd')
+    expect(s().qEnd).toBe('Database B')
+  })
+})
