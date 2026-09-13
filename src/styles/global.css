@@ -1,0 +1,60 @@
+@import './tokens.css';
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--kg-bg);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+body {
+  color: var(--kg-text);
+  font-family: var(--kg-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--kg-border-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--kg-border-strong);
+  border-radius: 4px;
+}
+
+a {
+  color: var(--kg-accent-l);
+}
+
+a:hover {
+  color: var(--kg-accent-l-hi);
+}
+
+input::placeholder {
+  color: var(--kg-text-faint);
+}
+
+/* 键盘可达性：图本身对键盘不可达，下方关系列表是唯一路径，焦点必须清晰 */
+:focus-visible {
+  outline: 2px solid var(--kg-accent-l);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

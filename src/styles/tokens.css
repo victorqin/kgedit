@@ -1,0 +1,67 @@
+/* 设计令牌。取值全部来自 `KG Studio.dc.html` 设计稿，禁止在组件里硬编码重复。 */
+:root {
+  /* 背景层次 —— 从最暗的画布底到最亮的浮层 */
+  --kg-bg: #0b0f15;
+  --kg-bg-rail: #0d131b;
+  --kg-bg-panel: #0d1219;
+  --kg-bg-surface: #0e141d;
+  --kg-bg-raised: #0f151e;
+  --kg-bg-input: #101822;
+  --kg-bg-card: #121924;
+  --kg-bg-hover: #18212c;
+  --kg-bg-hover-soft: #121a24;
+
+  /* 描边 */
+  --kg-border: #1c2431;
+  --kg-border-soft: #1f2937;
+  --kg-border-row: #151d27;
+  --kg-border-mid: #232e3c;
+  --kg-border-strong: #2b3543;
+  --kg-border-l: #2f6b45;
+  --kg-border-r: #2d5680;
+
+  /* 文字 —— 五级灰阶 */
+  --kg-text: #e2e8f0;
+  --kg-text-dim: #cbd5e1;
+  --kg-text-soft: #9aa7b9;
+  --kg-text-muted: #8b97ab;
+  --kg-text-faint: #4b5769;
+  --kg-text-ghost: #3f4b5c;
+  --kg-text-rail: #58657a;
+
+  /* 语义色 —— 左绿右蓝贯穿全局，是两侧面板的身份标识 */
+  --kg-accent-l: #4ade80;
+  --kg-accent-l-hi: #6ee79a;
+  --kg-accent-l-ink: #062012;
+  --kg-accent-r: #60a5fa;
+  --kg-accent-r-hi: #84baff;
+  --kg-accent-r-ink: #04121f;
+  --kg-warn: #f59e0b;
+  --kg-warn-text: #f0b046;
+  --kg-warn-border: #b4781e;
+  --kg-danger: #f87171;
+  --kg-danger-strong: #dc4c4c;
+  --kg-danger-border: #7f3030;
+
+  /* 排版 */
+  --kg-font: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --kg-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* 圆角 */
+  --kg-radius-sm: 6px;
+  --kg-radius: 8px;
+  --kg-radius-md: 9px;
+  --kg-radius-lg: 10px;
+  --kg-radius-xl: 12px;
+
+  /* 动效 —— 只用于 transform / opacity */
+  --kg-dur-fast: 150ms;
+  --kg-dur: 250ms;
+  --kg-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* 布局常量 */
+  --kg-rail-w: 64px;
+  --kg-gutter: 64px;
+  --kg-card-w: 184px;
+  --kg-card-h: 112px;
+}
