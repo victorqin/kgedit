@@ -5,18 +5,9 @@ import path from 'node:path'
 export default defineConfig({
   plugins: [react()],
   resolve: { alias: { '@': path.resolve(import.meta.dirname, 'src') } },
-  build: {
-    rollupOptions: {
-      output: {
-        // G6 与 antd 各自成块，避免挤进首屏主包
-        manualChunks(id: string) {
-          if (id.includes('@antv/g6')) return 'g6'
-          if (id.includes('node_modules/antd') || id.includes('@ant-design')) return 'antd'
-          return undefined
-        },
-      },
-    },
-  },
+  // 不做 manualChunks：把 antd 强行捏成一个块反而会让只有编辑页才用到的
+  // Modal / Tree / AutoComplete 一并挤进首屏。交给 Rollup 按路由自然分包，
+  // G6 由 useG6Graph 内的动态 import 天然落到独立块。
   test: {
     globals: true,
     environment: 'jsdom',
