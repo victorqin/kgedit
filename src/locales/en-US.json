@@ -1,0 +1,125 @@
+{
+  "app": {
+    "title": "KG Studio",
+    "stats": "{{nodes}} NODES · {{links}} RELATIONS",
+    "help": "Help",
+    "language": "Language"
+  },
+  "picker": {
+    "startPlaceholder": "Start node — click to browse",
+    "endPlaceholder": "End node — click to browse",
+    "search": "Search",
+    "noMatch": "No node matches",
+    "noMatchHint": "No node matched \"{{q}}\"",
+    "ariaStart": "Start node search",
+    "ariaEnd": "End node search"
+  },
+  "path": {
+    "title": "PATH STATUS",
+    "hint": "L-CLICK → START · R-CLICK → END",
+    "none": "No path found between [{{from}}] and [{{to}}]",
+    "empty": "Pick a start and an end node to trace a path",
+    "segmentTip": "Left-click → Start panel · Right-click → End panel"
+  },
+  "panel": {
+    "startTitle": "START-CENTRIC SUBGRAPH",
+    "endTitle": "END-CENTRIC SUBGRAPH",
+    "hops": "HOPS",
+    "hopsTip": "Hop depth — positive integer",
+    "newNode": "New blank node",
+    "truncated": "Truncated — showing {{shown}} of {{total}}",
+    "simplified": "Simplified rendering — too many nodes for detail cards",
+    "empty": "No node selected for this panel",
+    "emptyHint": "Search above or pick from the tree to center this panel"
+  },
+  "link": {
+    "linked": "LINKED — CLICK TO CUT",
+    "notLinked": "NOT LINKED — CLICK TO JOIN",
+    "linkedCount": "{{count}} RELATIONS — CLICK TO CUT",
+    "join": "Create a relation between Start and End",
+    "cut": "Remove a relation between Start and End",
+    "sameNode": "Start and End are the same node",
+    "pickToCut": "Choose a relation to remove",
+    "cutOne": "Cut"
+  },
+  "relations": {
+    "title": "RELATION EDITOR / ACTION BAR",
+    "nothingSelected": "NOTHING SELECTED",
+    "selectedLink": "SELECTED LINK · 1 RELATION",
+    "selectedNode": "SELECTED NODE [{{label}}] · {{count}} RELATION(S)",
+    "empty": "Left-click a node to list all of its relations · left-click an edge for a single relation",
+    "empty2": "Double-click a node to re-center the panel on it · right-click a node or edge to edit it",
+    "edit": "Edit",
+    "reverse": "Reverse",
+    "delete": "Delete",
+    "none": "This node has no relations yet"
+  },
+  "editor": {
+    "editNode": "Edit node · {{label}}",
+    "newNode": "New node",
+    "editRelation": "Edit relation",
+    "newRelation": "New relation",
+    "title": "TITLE",
+    "type": "TYPE",
+    "domain": "DOMAIN",
+    "description": "DESCRIPTION",
+    "relationLabel": "RELATION LABEL · [{{source}}] ▶ [{{target}}]",
+    "titlePlaceholder": "Node name",
+    "typePlaceholder": "e.g. Relational DB",
+    "domainPlaceholder": "e.g. Data Stores",
+    "descPlaceholder": "What this entity is",
+    "labelPlaceholder": "e.g. depends_on",
+    "deleteNode": "Delete node",
+    "deleteRelation": "Delete relation",
+    "expandAsCenter": "Expand as center",
+    "cancel": "Cancel",
+    "save": "Save",
+    "dirtyTitle": "Discard unsaved changes?",
+    "dirtyBody": "This editor has unsaved changes. Closing will discard them.",
+    "discard": "Discard",
+    "keepEditing": "Keep editing",
+    "titleRequired": "Title is required"
+  },
+  "confirm": {
+    "deleteNodeTitle": "Delete [{{label}}]?",
+    "deleteNodeBody": "This removes the node and all {{count}} relation(s) attached to it. This cannot be undone.",
+    "deleteLinkTitle": "Delete this relation?",
+    "deleteLinkBody": "This cannot be undone.",
+    "reverseTitle": "Reverse this relation?",
+    "reverseNow": "Now    [{{source}}] ──{{label}}──▶ [{{target}}]",
+    "reverseAfter": "After  [{{target}}] ──{{label}}──▶ [{{source}}]",
+    "triple": "[{{source}}] ──{{label}}──▶ [{{target}}]",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete"
+  },
+  "toast": {
+    "recentered": "Re-centered on {{label}}",
+    "saved": "Saved",
+    "created": "Created",
+    "reversed": "Direction reversed",
+    "linkDeleted": "Relation deleted",
+    "linkCreated": "Relation created",
+    "nodeDeleted": "Node and {{count}} relation(s) deleted",
+    "working": "Working…"
+  },
+  "error": {
+    "network": "Network request failed",
+    "retry": "Retry",
+    "selfLoop": "A relation cannot point a node at itself",
+    "duplicate": "This relation already exists",
+    "notFound": "That record no longer exists",
+    "unauthorized": "Session expired",
+    "generic": "Something went wrong"
+  },
+  "nav": {
+    "overview": "Overview",
+    "explore": "Explore",
+    "kg": "Knowledge Graph",
+    "datasets": "Datasets",
+    "settings": "Settings",
+    "main": "Main navigation",
+    "blank": "Coming soon",
+    "blankBody": "This area is reserved. The knowledge graph editor is the only implemented surface for now."
+  }
+}

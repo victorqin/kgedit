@@ -1,0 +1,125 @@
+{
+  "app": {
+    "title": "KG Studio",
+    "stats": "{{nodes}} 个节点 · {{links}} 条关系",
+    "help": "帮助",
+    "language": "语言"
+  },
+  "picker": {
+    "startPlaceholder": "起始节点 — 点击浏览",
+    "endPlaceholder": "终点节点 — 点击浏览",
+    "search": "查询",
+    "noMatch": "没有匹配的节点",
+    "noMatchHint": "没有匹配「{{q}}」的节点",
+    "ariaStart": "起始节点搜索",
+    "ariaEnd": "终点节点搜索"
+  },
+  "path": {
+    "title": "路径状态",
+    "hint": "左键 → 起点 · 右键 → 终点",
+    "none": "[{{from}}] 与 [{{to}}] 之间没有可达路径",
+    "empty": "选择起点与终点以追踪路径",
+    "segmentTip": "左键 → 起点面板 · 右键 → 终点面板"
+  },
+  "panel": {
+    "startTitle": "起点子图",
+    "endTitle": "终点子图",
+    "hops": "跳数",
+    "hopsTip": "跳数深度 — 正整数",
+    "newNode": "新建空白节点",
+    "truncated": "已截断 — 显示 {{shown}} / 共 {{total}}",
+    "simplified": "已切换简化渲染 — 节点过多，不再绘制详情卡片",
+    "empty": "该面板尚未选择节点",
+    "emptyHint": "在上方搜索或从树中选择，以确定该面板的中心节点"
+  },
+  "link": {
+    "linked": "已连接 — 点击断开",
+    "notLinked": "未连接 — 点击建立",
+    "linkedCount": "已有 {{count}} 条关系 — 点击断开",
+    "join": "在起点与终点之间建立关系",
+    "cut": "移除起点与终点之间的关系",
+    "sameNode": "起点与终点是同一个节点",
+    "pickToCut": "选择要移除的关系",
+    "cutOne": "断开"
+  },
+  "relations": {
+    "title": "关系编辑 / 操作栏",
+    "nothingSelected": "未选中任何元素",
+    "selectedLink": "已选中连线 · 1 条关系",
+    "selectedNode": "已选中节点 [{{label}}] · {{count}} 条关系",
+    "empty": "左键点击节点列出其全部关系 · 左键点击连线查看单条关系",
+    "empty2": "双击节点以其为中心重新展开 · 右键节点或连线进行编辑",
+    "edit": "编辑",
+    "reverse": "反转",
+    "delete": "删除",
+    "none": "该节点暂无关系"
+  },
+  "editor": {
+    "editNode": "编辑节点 · {{label}}",
+    "newNode": "新建节点",
+    "editRelation": "编辑关系",
+    "newRelation": "新建关系",
+    "title": "标题",
+    "type": "类型",
+    "domain": "领域",
+    "description": "描述",
+    "relationLabel": "关系标签 · [{{source}}] ▶ [{{target}}]",
+    "titlePlaceholder": "节点名称",
+    "typePlaceholder": "例如 Relational DB",
+    "domainPlaceholder": "例如 Data Stores",
+    "descPlaceholder": "这个实体是什么",
+    "labelPlaceholder": "例如 depends_on",
+    "deleteNode": "删除节点",
+    "deleteRelation": "删除关系",
+    "expandAsCenter": "以此为中心展开",
+    "cancel": "取消",
+    "save": "保存",
+    "dirtyTitle": "放弃未保存的修改？",
+    "dirtyBody": "当前编辑内容尚未保存，关闭将丢弃这些修改。",
+    "discard": "放弃",
+    "keepEditing": "继续编辑",
+    "titleRequired": "标题不能为空"
+  },
+  "confirm": {
+    "deleteNodeTitle": "确认删除 [{{label}}]？",
+    "deleteNodeBody": "将同时删除该节点及其关联的 {{count}} 条关系，且无法撤销。",
+    "deleteLinkTitle": "确认删除这条关系？",
+    "deleteLinkBody": "此操作无法撤销。",
+    "reverseTitle": "确认反转这条关系？",
+    "reverseNow": "当前   [{{source}}] ──{{label}}──▶ [{{target}}]",
+    "reverseAfter": "反转后 [{{target}}] ──{{label}}──▶ [{{source}}]",
+    "triple": "[{{source}}] ──{{label}}──▶ [{{target}}]",
+    "cancel": "取消",
+    "confirm": "确认",
+    "delete": "删除"
+  },
+  "toast": {
+    "recentered": "已以 {{label}} 为中心重新展开",
+    "saved": "已保存",
+    "created": "已创建",
+    "reversed": "方向已反转",
+    "linkDeleted": "关系已删除",
+    "linkCreated": "关系已创建",
+    "nodeDeleted": "已删除节点及其 {{count}} 条关系",
+    "working": "处理中…"
+  },
+  "error": {
+    "network": "网络请求失败",
+    "retry": "重试",
+    "selfLoop": "关系不能指向节点自身",
+    "duplicate": "这条关系已经存在",
+    "notFound": "该记录已不存在",
+    "unauthorized": "登录状态已过期",
+    "generic": "出了点问题"
+  },
+  "nav": {
+    "overview": "大盘概览",
+    "explore": "探索",
+    "kg": "知识图谱",
+    "datasets": "数据集",
+    "settings": "设置",
+    "main": "主导航",
+    "blank": "敬请期待",
+    "blankBody": "此区域为预留位置。目前仅实现了知识图谱编辑页。"
+  }
+}

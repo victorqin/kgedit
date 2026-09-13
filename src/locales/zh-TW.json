@@ -1,0 +1,125 @@
+{
+  "app": {
+    "title": "KG Studio",
+    "stats": "{{nodes}} 個節點 · {{links}} 條關係",
+    "help": "說明",
+    "language": "語言"
+  },
+  "picker": {
+    "startPlaceholder": "起始節點 — 點擊瀏覽",
+    "endPlaceholder": "終點節點 — 點擊瀏覽",
+    "search": "查詢",
+    "noMatch": "沒有符合的節點",
+    "noMatchHint": "沒有符合「{{q}}」的節點",
+    "ariaStart": "起始節點搜尋",
+    "ariaEnd": "終點節點搜尋"
+  },
+  "path": {
+    "title": "路徑狀態",
+    "hint": "左鍵 → 起點 · 右鍵 → 終點",
+    "none": "[{{from}}] 與 [{{to}}] 之間沒有可達路徑",
+    "empty": "選擇起點與終點以追蹤路徑",
+    "segmentTip": "左鍵 → 起點面板 · 右鍵 → 終點面板"
+  },
+  "panel": {
+    "startTitle": "起點子圖",
+    "endTitle": "終點子圖",
+    "hops": "跳數",
+    "hopsTip": "跳數深度 — 正整數",
+    "newNode": "新增空白節點",
+    "truncated": "已截斷 — 顯示 {{shown}} / 共 {{total}}",
+    "simplified": "已切換簡化繪製 — 節點過多，不再繪製詳情卡片",
+    "empty": "該面板尚未選擇節點",
+    "emptyHint": "在上方搜尋或從樹中選擇，以決定該面板的中心節點"
+  },
+  "link": {
+    "linked": "已連接 — 點擊斷開",
+    "notLinked": "未連接 — 點擊建立",
+    "linkedCount": "已有 {{count}} 條關係 — 點擊斷開",
+    "join": "在起點與終點之間建立關係",
+    "cut": "移除起點與終點之間的關係",
+    "sameNode": "起點與終點是同一個節點",
+    "pickToCut": "選擇要移除的關係",
+    "cutOne": "斷開"
+  },
+  "relations": {
+    "title": "關係編輯 / 操作列",
+    "nothingSelected": "未選取任何元素",
+    "selectedLink": "已選取連線 · 1 條關係",
+    "selectedNode": "已選取節點 [{{label}}] · {{count}} 條關係",
+    "empty": "左鍵點擊節點列出其全部關係 · 左鍵點擊連線檢視單條關係",
+    "empty2": "雙擊節點以其為中心重新展開 · 右鍵節點或連線進行編輯",
+    "edit": "編輯",
+    "reverse": "反轉",
+    "delete": "刪除",
+    "none": "該節點尚無關係"
+  },
+  "editor": {
+    "editNode": "編輯節點 · {{label}}",
+    "newNode": "新增節點",
+    "editRelation": "編輯關係",
+    "newRelation": "新增關係",
+    "title": "標題",
+    "type": "類型",
+    "domain": "領域",
+    "description": "描述",
+    "relationLabel": "關係標籤 · [{{source}}] ▶ [{{target}}]",
+    "titlePlaceholder": "節點名稱",
+    "typePlaceholder": "例如 Relational DB",
+    "domainPlaceholder": "例如 Data Stores",
+    "descPlaceholder": "這個實體是什麼",
+    "labelPlaceholder": "例如 depends_on",
+    "deleteNode": "刪除節點",
+    "deleteRelation": "刪除關係",
+    "expandAsCenter": "以此為中心展開",
+    "cancel": "取消",
+    "save": "儲存",
+    "dirtyTitle": "放棄未儲存的修改？",
+    "dirtyBody": "目前編輯內容尚未儲存，關閉將捨棄這些修改。",
+    "discard": "放棄",
+    "keepEditing": "繼續編輯",
+    "titleRequired": "標題不能為空"
+  },
+  "confirm": {
+    "deleteNodeTitle": "確認刪除 [{{label}}]？",
+    "deleteNodeBody": "將同時刪除該節點及其關聯的 {{count}} 條關係，且無法復原。",
+    "deleteLinkTitle": "確認刪除這條關係？",
+    "deleteLinkBody": "此操作無法復原。",
+    "reverseTitle": "確認反轉這條關係？",
+    "reverseNow": "目前   [{{source}}] ──{{label}}──▶ [{{target}}]",
+    "reverseAfter": "反轉後 [{{target}}] ──{{label}}──▶ [{{source}}]",
+    "triple": "[{{source}}] ──{{label}}──▶ [{{target}}]",
+    "cancel": "取消",
+    "confirm": "確認",
+    "delete": "刪除"
+  },
+  "toast": {
+    "recentered": "已以 {{label}} 為中心重新展開",
+    "saved": "已儲存",
+    "created": "已建立",
+    "reversed": "方向已反轉",
+    "linkDeleted": "關係已刪除",
+    "linkCreated": "關係已建立",
+    "nodeDeleted": "已刪除節點及其 {{count}} 條關係",
+    "working": "處理中…"
+  },
+  "error": {
+    "network": "網路請求失敗",
+    "retry": "重試",
+    "selfLoop": "關係不能指向節點自身",
+    "duplicate": "這條關係已經存在",
+    "notFound": "該紀錄已不存在",
+    "unauthorized": "登入狀態已過期",
+    "generic": "出了點問題"
+  },
+  "nav": {
+    "overview": "大盤概覽",
+    "explore": "探索",
+    "kg": "知識圖譜",
+    "datasets": "資料集",
+    "settings": "設定",
+    "main": "主導覽",
+    "blank": "敬請期待",
+    "blankBody": "此區域為預留位置。目前僅實作了知識圖譜編輯頁。"
+  }
+}
