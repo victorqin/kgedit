@@ -19,5 +19,10 @@ export default tseslint.config(
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
+  {
+    // 路由定义文件导出的是 router 对象而非组件，该规则在此处为误报
+    files: ['src/router/**/*.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
   prettier,
 )

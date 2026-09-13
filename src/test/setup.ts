@@ -25,7 +25,19 @@ if (!window.matchMedia) {
   }))
 }
 
-// G6 会探测 canvas；组件测试里对图的真实渲染不做断言，交给 E2E
-if (!HTMLCanvasElement.prototype.getContext) {
-  HTMLCanvasElement.prototype.getContext = (() => null) as never
-}
+// jsdom 不实现 canvas。返回 null 会让期待 context 的调用方直接炸，
+// 所以给一个最小可用的桩；图的真实渲染由 E2E 覆盖。
+const stubContext = () =>
+  new Proxy(
+    {},
+    {
+      get: (_t, prop) => {
+        if (prop === 'canvas') return document.createElement('canvas')
+        if (prop === 'measureText') return () => ({ width: 0 })
+        if (prop === 'getImageData') return () => ({ data: new Uint8ClampedArray(4) })
+        return () => undefined
+      },
+    },
+  )
+
+HTMLCanvasElement.prototype.getContext = stubContext as never

@@ -15,16 +15,19 @@ const SHOW_DELAY_MS = 250
 export function BlockingOverlay() {
   const { t } = useTranslation()
   const blocking = useKgStore((s) => s.blocking)
-  const [visible, setVisible] = useState(false)
+  const [delayPassed, setDelayPassed] = useState(false)
 
   useEffect(() => {
-    if (!blocking) {
-      setVisible(false)
-      return
+    if (!blocking) return
+    const timer = window.setTimeout(() => setDelayPassed(true), SHOW_DELAY_MS)
+    return () => {
+      window.clearTimeout(timer)
+      setDelayPassed(false)
     }
-    const timer = window.setTimeout(() => setVisible(true), SHOW_DELAY_MS)
-    return () => window.clearTimeout(timer)
   }, [blocking])
+
+  // 派生而非另存一份状态：blocking 一落下就立刻隐藏，不必等 delayPassed 复位
+  const visible = blocking && delayPassed
 
   // 请求已经发出去了，Esc 撤不回来，所以蒙层期间把它吞掉
   useEffect(() => {

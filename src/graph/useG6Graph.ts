@@ -22,7 +22,7 @@ interface GraphLike {
   destroy: () => void
   zoomTo: (z: number) => Promise<unknown>
   focusElement: (id: string) => Promise<unknown>
-  setElementState: (state: Record<string, string[]>) => void
+  setElementState: (state: Record<string, string[]>) => void | Promise<unknown>
   on: (event: string, cb: (e: { target?: { id?: string } }) => void) => void
 }
 
@@ -37,9 +37,13 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
   const containerRef = useRef<HTMLDivElement>(null)
   const graphRef = useRef<GraphLike | null>(null)
   const clickTimer = useRef<number>(undefined)
-  // handlers 每次渲染都是新对象，用 ref 存住，避免重建图实例
+  // handlers 每次渲染都是新对象，用 ref 存住，避免重建图实例。
+  // 赋值放在 effect 里：渲染期写 ref 会触发级联渲染告警，而事件回调
+  // 只可能在挂载之后触发，那时 effect 已经跑过了。
   const handlersRef = useRef(handlers)
-  handlersRef.current = handlers
+  useEffect(() => {
+    handlersRef.current = handlers
+  }, [handlers])
 
   const simplified = (payload?.nodes.length ?? 0) > SIMPLIFY_THRESHOLD
   const centerId = payload?.meta.centerId
@@ -173,10 +177,11 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
       states[e.id] = []
     })
     if (selection?.kind === 'edge' && selection.side === side) states[selection.id] = ['selected']
+    // 图尚未渲染完成时这里会失败，同步与异步两条路径都要接住
     try {
-      graph.setElementState(states)
+      void Promise.resolve(graph.setElementState(states)).catch(() => {})
     } catch {
-      // 图尚未渲染完成
+      /* 实例已销毁 */
     }
   }, [selection, side, payload])
 
