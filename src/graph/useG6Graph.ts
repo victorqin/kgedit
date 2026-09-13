@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import type { GraphPayload } from '@/api/types'
 import { ACCENT, type Side } from '@/theme/antdTheme'
-import { buildGraphOptions, SIMPLIFY_THRESHOLD, toG6Data } from './graphOptions'
+import { buildGraphOptions, SIMPLIFY_THRESHOLD, toG6Data, type G6Data } from './graphOptions'
+import { findRewiredEdgeIds } from './edgeRemount'
 import type { Selection } from '@/stores/slices/selection'
 
 /** 单击与双击去重窗口。双击会先触发一次 click，那是一次白发的网络请求。 */
@@ -9,6 +10,12 @@ const DBLCLICK_GUARD_MS = 250
 
 /** 缩放下限。低于这个比例卡片上的字就读不了了。 */
 const MIN_ZOOM = 0.5
+
+/**
+ * 图实例挂在容器 DOM 上的属性名。连线画在 canvas 里、DOM 中看不到，
+ * 浏览器控制台调试和 e2e 断言图内部状态都只能从这里拿实例。
+ */
+type GraphHost = HTMLDivElement & { __g6?: GraphLike | null }
 
 export interface G6Handlers {
   onNodeClick: (id: string) => void
@@ -21,6 +28,7 @@ export interface G6Handlers {
 
 interface GraphLike {
   setData: (d: unknown) => void
+  removeEdgeData: (ids: string[]) => void
   render: () => Promise<unknown>
   destroy: () => void
   fitView: (options?: { when?: 'overflow' | 'always' }, animation?: false) => Promise<unknown>
@@ -50,6 +58,9 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
     handlersRef.current = handlers
   }, [handlers])
 
+  // 上一次喂给 G6 的数据，用来判断哪些边换了端点
+  const prevDataRef = useRef<G6Data | null>(null)
+
   const simplified = (payload?.nodes.length ?? 0) > SIMPLIFY_THRESHOLD
 
   // 节点类型无法热切换，只有跨越简化阈值时才重建实例
@@ -68,6 +79,7 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
         ...buildGraphOptions({ side, simplified }),
       } as never) as unknown as GraphLike
       graphRef.current = graph
+      ;(el as GraphHost).__g6 = graph
 
       graph.on('edge:click', (e) => {
         const id = e.target?.id
@@ -142,6 +154,9 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
         // 实例可能尚未初始化完成
       }
       graphRef.current = null
+      ;(el as GraphHost).__g6 = null
+      // 实例没了，上一帧的数据快照也随之作废
+      prevDataRef.current = null
     }
   }, [side, simplified])
 
@@ -153,7 +168,20 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
     let cancelled = false
 
     void (async () => {
-      graph.setData(toG6Data(payload))
+      const data = toG6Data(payload)
+      // 换了端点的边先删掉，让 setData 把它当新边加回来 —— 就地更新会让
+      // graphlib 的端点索引漏掉一端，详见 edgeRemount.ts
+      const rewired = findRewiredEdgeIds(prevDataRef.current, data)
+      if (rewired.length) {
+        try {
+          graph.removeEdgeData(rewired)
+        } catch {
+          // 实例状态与快照不一致时直接跳过，setData 仍会把数据补齐
+        }
+      }
+      prevDataRef.current = data
+
+      graph.setData(data)
       await graph.render()
       if (cancelled) return
       try {

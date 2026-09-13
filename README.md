@@ -458,6 +458,27 @@ axios 拦截器预留了 token 注入位与 401 处理钩子，接真实后端�
 
 右键菜单的屏蔽以「该处右键是否有应用动作」为准：图区域内与路径栏节点上有（打开弹窗 / 聚焦终点），故屏蔽；关系列表、搜索框、导航等处没有，保留浏览器默认。
 
+### 绕开的一个上游缺陷：反转连线
+
+`@antv/graphlib@2.0.4` 的 `updateEdgeSource` / `updateEdgeTarget` 各自从旧端点的
+`bothEdgesMap` 里 delete、往新端点 add，彼此互不知情。反转一条边时新 source 恰好是旧
+target，第二步会把第一步刚保住的那份成员关系删掉：
+
+```
+a→b 反转成 b→a
+  updateEdgeSource(b)   a 失去 e1，b 保留 e1
+  updateEdgeTarget(a)   b 失去 e1，a 拿回 e1
+  结果：b 的关联边集合是空的
+```
+
+G6 的 `setData` 对同 id 的边正是走这两步的就地更新，而拖动节点时它靠这个集合决定重绘哪些边。
+于是反转之后拖新起点，边不跟着走，看起来就是节点从边上脱落了；拖另一端一切正常。
+
+处理方式在 `graph/edgeRemount.ts`：喂给 `setData` 之前比对上一帧，把换了端点的边先
+`removeEdgeData` 掉，让它作为新边加回来，graphlib 从头重建索引表。
+`__tests__/edgeRemount.test.ts` 里留了一个直接打在 graphlib 上的探针 —— 上游哪天修好了，
+那条测试会失败并提示可以删掉这段兜底。
+
 ### 相比设计稿原型的修正
 
 设计稿是把全量图放在内存里的原型，有几个问题只有搬到服务端才暴露：
