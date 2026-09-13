@@ -17,6 +17,7 @@ export interface GraphSlice {
   error: { L: string | null; R: string | null }
   setHops: (n: number) => void
   setCenter: (side: Side, id: string) => Promise<void>
+  focusNode: (side: Side, id: string) => Promise<void>
   loadSide: (side: Side) => Promise<void>
   loadPath: () => Promise<void>
   loadStats: () => Promise<void>
@@ -63,6 +64,15 @@ export const createGraphSlice: SliceCreator<GraphSlice> = (set, get) => ({
         s[side === 'L' ? 'qStart' : 'qEnd'] = label
       })
     }
+  },
+
+  /**
+   * 聚焦一个节点：把它设为该侧中心，同时选中它，下方关系列表随之列出它的全部关系。
+   * 双击节点与点击路径栏上的节点走的都是这条路径 —— 两者语义相同，不该各写一遍。
+   * 两个请求互不依赖，并行发出。
+   */
+  focusNode: async (side, id) => {
+    await Promise.all([get().setCenter(side, id), get().selectNode(side, id)])
   },
 
   loadSide: async (side) => {

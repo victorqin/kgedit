@@ -229,3 +229,54 @@ test.describe('图区域内屏蔽浏览器右键菜单', () => {
     expect(await lastPrevented(page)).toBe(false)
   })
 })
+
+test.describe('路径栏上的节点', () => {
+  test('左键聚焦到起点面板并同时选中', async ({ page }) => {
+    await page.goto('/kg?start=a101&end=dbb&hops=2')
+    await page.locator('[data-node-id]').first().waitFor({ timeout: 25_000 })
+    await expect(page.getByText('NOTHING SELECTED')).toBeVisible()
+
+    // 路径中段的节点，左右两侧都不是它
+    await page.locator('.path-status__node', { hasText: 'Gateway D' }).click()
+
+    await expect(page).toHaveURL(/start=gwd/)
+    await expect(page.getByRole('combobox', { name: 'Start node search' })).toHaveValue('Gateway D')
+    // 关系列表随之更新
+    await expect(page.getByText(/SELECTED NODE \[Gateway D\]/)).toBeVisible()
+    await expect(page.locator('.relation-row')).toHaveCount(3)
+  })
+
+  test('右键聚焦到终点面板并同时选中', async ({ page }) => {
+    await page.goto('/kg?start=a101&end=dbb&hops=2')
+    await page.locator('[data-node-id]').first().waitFor({ timeout: 25_000 })
+
+    await page
+      .locator('.path-status__node', { hasText: 'Cache Instance A' })
+      .click({ button: 'right' })
+
+    await expect(page).toHaveURL(/end=cache/)
+    await expect(page.getByRole('combobox', { name: 'End node search' })).toHaveValue(
+      'Cache Instance A',
+    )
+    await expect(page.getByText(/SELECTED NODE \[Cache Instance A\]/)).toBeVisible()
+  })
+
+  test('右键路径栏不会弹出浏览器菜单', async ({ page }) => {
+    await page.goto('/kg?start=a101&end=dbb&hops=2')
+    await page.locator('[data-node-id]').first().waitFor({ timeout: 25_000 })
+    await page.evaluate(() => {
+      const w = window as unknown as { __ctx: boolean[] }
+      w.__ctx = []
+      document.addEventListener('contextmenu', (e) => w.__ctx.push(e.defaultPrevented), false)
+    })
+
+    await page
+      .locator('.path-status__node', { hasText: 'Cache Instance A' })
+      .click({ button: 'right' })
+
+    const prevented = await page.evaluate(
+      () => (window as unknown as { __ctx: boolean[] }).__ctx.at(-1) ?? null,
+    )
+    expect(prevented).toBe(true)
+  })
+})

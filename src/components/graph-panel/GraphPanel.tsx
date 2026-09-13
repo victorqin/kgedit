@@ -28,7 +28,7 @@ export function GraphPanel({ side }: { side: Side }) {
   const loadSide = useKgStore((s) => s.loadSide)
   const selectNode = useKgStore((s) => s.selectNode)
   const selectEdge = useKgStore((s) => s.selectEdge)
-  const setCenter = useKgStore((s) => s.setCenter)
+  const focusNode = useKgStore((s) => s.focusNode)
   const openNodeEditor = useKgStore((s) => s.openNodeEditor)
   const openLinkEditor = useKgStore((s) => s.openLinkEditor)
   const clearSelection = useKgStore((s) => s.clearSelection)
@@ -39,9 +39,7 @@ export function GraphPanel({ side }: { side: Side }) {
     selection,
     handlers: {
       onNodeClick: (id) => void selectNode(side, id),
-      // 双击在重新聚焦的同时也选中该节点，下方关系列表随即列出它的全部关系。
-      // 两个请求互不依赖，并行发出。
-      onNodeDblClick: (id) => void Promise.all([setCenter(side, id), selectNode(side, id)]),
+      onNodeDblClick: (id) => void focusNode(side, id),
       onNodeContextMenu: (id) => {
         void selectNode(side, id)
         openNodeEditor(id, side)

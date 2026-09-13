@@ -161,3 +161,37 @@ describe('setCenter keeps the search box in sync', () => {
     expect(s().qEnd).toBe('Database B')
   })
 })
+
+describe('focusNode', () => {
+  it('centers the side and selects the node in one action', async () => {
+    await s().focusNode('L', 'gwd')
+    expect(s().startId).toBe('gwd')
+    expect(s().sel).toEqual({ side: 'L', kind: 'node', id: 'gwd' })
+  })
+
+  it('fills the relation list with that node relations', async () => {
+    await s().focusNode('L', 'gwd')
+    // gwd 有 caches / reads / stores 三条
+    expect(s().links).toHaveLength(3)
+    expect(s().links.map((l) => l.label).sort()).toEqual(['caches', 'reads', 'stores'])
+  })
+
+  it('keeps the search box in sync with the new center', async () => {
+    await s().focusNode('L', 'gwd')
+    expect(s().qStart).toBe('Gateway D')
+  })
+
+  it('attributes the selection to the end side when focusing there', async () => {
+    await s().focusNode('R', 'dbb')
+    expect(s().endId).toBe('dbb')
+    expect(s().sel?.side).toBe('R')
+    expect(s().qEnd).toBe('Database B')
+  })
+
+  it('leaves the opposite side untouched', async () => {
+    useKgStore.setState({ endId: 'dbb', qEnd: 'Database B' })
+    await s().focusNode('L', 'gwd')
+    expect(s().endId).toBe('dbb')
+    expect(s().qEnd).toBe('Database B')
+  })
+})

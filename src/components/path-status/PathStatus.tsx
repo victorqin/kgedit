@@ -15,7 +15,7 @@ export function PathStatus() {
       qEnd: s.qEnd,
     })),
   )
-  const setCenter = useKgStore((s) => s.setCenter)
+  const focusNode = useKgStore((s) => s.focusNode)
 
   const segments = path?.segments ?? []
   const hasPath = Boolean(path?.found) && segments.length > 0
@@ -58,10 +58,12 @@ export function PathStatus() {
                     type="button"
                     className={`path-status__node${modifier ? ` path-status__node--${modifier}` : ''}`}
                     title={t('path.segmentTip')}
-                    onClick={() => void setCenter('L', seg.node.id)}
+                    // 左键聚焦到起点面板、右键聚焦到终点面板；两者都会顺带选中
+                    // 该节点，下方关系列表随之更新 —— 与双击节点的语义保持一致。
+                    onClick={() => void focusNode('L', seg.node.id)}
                     onContextMenu={(e) => {
                       e.preventDefault()
-                      void setCenter('R', seg.node.id)
+                      void focusNode('R', seg.node.id)
                     }}
                   >
                     [{seg.node.label}]
