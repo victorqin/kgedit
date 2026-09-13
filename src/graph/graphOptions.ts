@@ -8,6 +8,12 @@ import { buildNodeCard, CARD_SIZE } from './nodeCard'
  */
 export const MOUSE_BUTTONS = { LEFT: 1, RIGHT: 2, MIDDLE: 4 } as const
 
+/** G6 标准事件里的命中类型，`canvas` 表示没命中任何元素。 */
+export interface DragGateEvent {
+  buttons?: number
+  targetType?: 'canvas' | 'node' | 'edge' | 'combo'
+}
+
 /**
  * 只有按住中键才允许拖拽 —— 画布平移与节点拖动都是。
  *
@@ -17,9 +23,29 @@ export const MOUSE_BUTTONS = { LEFT: 1, RIGHT: 2, MIDDLE: 4 } as const
  *    contextmenu 打开弹窗，pointerup 被弹窗吞掉，G6 里留下一个没清掉的
  *    按下记录；弹窗关闭后鼠标一动就补发 dragstart。那一刻没有任何键按下
  *    （buttons === 0），这里直接拒绝，拖拽就无从发生。
+ *
+ * 但这只是「能不能拖」的一半。另一半是「拖的是谁」，见下面两个谓词。
  */
-export const isMiddleButtonDrag = (event: { buttons?: number }): boolean =>
+export const isMiddleButtonDrag = (event: DragGateEvent): boolean =>
   event.buttons === MOUSE_BUTTONS.MIDDLE
+
+/** 中键按在节点上 → 只拖这一个节点，别的节点不动，连线被拉扯。 */
+export const canDragNode = (event: DragGateEvent): boolean =>
+  isMiddleButtonDrag(event) && event.targetType === 'node'
+
+/**
+ * 中键按在节点以外的任何地方（空白画布、连线）→ 平移整张图。
+ *
+ * 命中类型这一层判断本来是 G6 内置 enable 自带的
+ * （drag-canvas 只认 canvas，drag-element 只认 node/combo），
+ * 我们用自定义 enable 覆盖它时把这层一并覆盖没了，于是中键拖一个节点
+ * 会同时满足两个行为：节点自己动，整张图也跟着平移。两个谓词必须互斥。
+ *
+ * 这里用「非节点」而不是「等于 canvas」：连线又细又难躲开，
+ * 蹭到一条边就平移失灵是迟早会被骂的手感。
+ */
+export const canPanCanvas = (event: DragGateEvent): boolean =>
+  isMiddleButtonDrag(event) && event.targetType !== 'node'
 
 /**
  * 超过这个节点数就不再渲染 HTML 卡片。
@@ -135,10 +161,11 @@ export function buildGraphOptions({ side, simplified }: { side: Side; simplified
       animation: false,
     },
     behaviors: [
-      // 画布平移与节点拖动统一收敛到中键，左键只负责选择
-      { type: 'drag-canvas', enable: isMiddleButtonDrag },
+      // 拖拽统一收敛到中键，左键只负责选择；
+      // 中键按在节点上就拖节点，按在别处就平移画布，两者互斥。
+      { type: 'drag-canvas', enable: canPanCanvas },
       'zoom-canvas',
-      { type: 'drag-element', enable: isMiddleButtonDrag },
+      { type: 'drag-element', enable: canDragNode },
     ],
   }
 }

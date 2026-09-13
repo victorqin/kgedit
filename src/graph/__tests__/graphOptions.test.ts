@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import {
   buildGraphOptions,
+  canDragNode,
+  canPanCanvas,
   isMiddleButtonDrag,
   MOUSE_BUTTONS,
   SIMPLIFY_THRESHOLD,
@@ -70,15 +72,61 @@ describe('isMiddleButtonDrag', () => {
   })
 })
 
+describe('drag gates split by what the cursor is over', () => {
+  const MIDDLE = MOUSE_BUTTONS.MIDDLE
+
+  it('drags the node when the middle button goes down on a node', () => {
+    expect(canDragNode({ buttons: MIDDLE, targetType: 'node' })).toBe(true)
+  })
+
+  it('does not drag a node when the middle button goes down on blank canvas', () => {
+    expect(canDragNode({ buttons: MIDDLE, targetType: 'canvas' })).toBe(false)
+  })
+
+  it('pans the canvas when the middle button goes down on blank canvas', () => {
+    expect(canPanCanvas({ buttons: MIDDLE, targetType: 'canvas' })).toBe(true)
+  })
+
+  it('does NOT pan the canvas when the middle button goes down on a node', () => {
+    // 这条就是那个缺陷：G6 内置 enable 自带的命中类型判断被我们的
+    // 自定义 enable 覆盖掉了，于是中键拖节点时整张图也跟着平移。
+    expect(canPanCanvas({ buttons: MIDDLE, targetType: 'node' })).toBe(false)
+  })
+
+  it('pans from an edge too — 只有节点例外，别处一律平移', () => {
+    expect(canPanCanvas({ buttons: MIDDLE, targetType: 'edge' })).toBe(true)
+    expect(canDragNode({ buttons: MIDDLE, targetType: 'edge' })).toBe(false)
+  })
+
+  it('never lets both gates open on one event, whatever it is', () => {
+    const targets = ['canvas', 'node', 'edge', 'combo', undefined] as const
+    const buttons = [0, MOUSE_BUTTONS.LEFT, MOUSE_BUTTONS.RIGHT, MIDDLE, undefined]
+    for (const targetType of targets) {
+      for (const b of buttons) {
+        const ev = { buttons: b, targetType }
+        expect(canDragNode(ev) && canPanCanvas(ev), JSON.stringify(ev)).toBe(false)
+      }
+    }
+  })
+
+  it('still refuses every non-middle button on both gates', () => {
+    for (const b of [0, MOUSE_BUTTONS.LEFT, MOUSE_BUTTONS.RIGHT, undefined]) {
+      expect(canDragNode({ buttons: b, targetType: 'node' })).toBe(false)
+      expect(canPanCanvas({ buttons: b, targetType: 'canvas' })).toBe(false)
+    }
+  })
+})
+
 describe('behaviors', () => {
-  it('gates both canvas panning and node dragging on the same predicate', () => {
+  it('wires each drag behavior to its own gate', () => {
     const { behaviors } = buildGraphOptions({ side: 'L', simplified: false })
     const gated = behaviors.filter(
-      (b): b is { type: string; enable: typeof isMiddleButtonDrag } =>
+      (b): b is { type: string; enable: typeof canDragNode } =>
         typeof b === 'object' && 'enable' in b,
     )
     expect(gated.map((b) => b.type).sort()).toEqual(['drag-canvas', 'drag-element'])
-    gated.forEach((b) => expect(b.enable).toBe(isMiddleButtonDrag))
+    expect(gated.find((b) => b.type === 'drag-canvas')?.enable).toBe(canPanCanvas)
+    expect(gated.find((b) => b.type === 'drag-element')?.enable).toBe(canDragNode)
   })
 })
 

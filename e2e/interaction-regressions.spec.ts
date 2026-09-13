@@ -54,6 +54,90 @@ test.describe('拖拽只认中键', () => {
     expect(moved, '中键没能拖动节点').toBeGreaterThan(40)
   })
 
+  /**
+   * 上面那条只量了被拖节点自己的绝对位置 —— 整张图跟着平移时它照样在动，
+   * 所以量不出这个缺陷。能分辨的是相对关系：另一个没碰过的节点必须原地不动。
+   */
+  test('中键拖节点时，画布和其他节点都不动', async ({ page }) => {
+    await page.goto('/kg?start=a101&end=dbb&hops=2')
+    const dragged = page.locator('.graph-panel--L [data-node-id="a101"]').first()
+    await dragged.waitFor({ timeout: 25_000 })
+    await page.waitForTimeout(1500)
+
+    const otherId = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('.graph-panel--L [data-node-id]'))
+        .map((el) => (el as HTMLElement).dataset.nodeId!)
+        .find((id) => id !== 'a101'),
+    )
+    expect(otherId, '左侧图里没有第二个节点可作参照').toBeTruthy()
+    const other = page.locator(`.graph-panel--L [data-node-id="${otherId}"]`).first()
+
+    const draggedBefore = (await dragged.boundingBox())!
+    const otherBefore = (await other.boundingBox())!
+    const cx = draggedBefore.x + draggedBefore.width / 2
+    const cy = draggedBefore.y + draggedBefore.height / 2
+
+    await page.mouse.move(cx, cy)
+    await page.mouse.down({ button: 'middle' })
+    for (let i = 1; i <= 10; i++) {
+      await page.mouse.move(cx + i * 14, cy + i * 9)
+      await page.waitForTimeout(20)
+    }
+    await page.mouse.up({ button: 'middle' })
+    await page.waitForTimeout(400)
+
+    const draggedAfter = (await dragged.boundingBox())!
+    const otherAfter = (await other.boundingBox())!
+    const draggedBy = Math.hypot(draggedAfter.x - draggedBefore.x, draggedAfter.y - draggedBefore.y)
+    const otherBy = Math.hypot(otherAfter.x - otherBefore.x, otherAfter.y - otherBefore.y)
+
+    expect(draggedBy, '中键没能拖动目标节点').toBeGreaterThan(40)
+    expect(otherBy, `拖一个节点把 ${otherId} 也带走了 ${Math.round(otherBy)}px —— 画布跟着平移了`).toBeLessThan(5)
+  })
+
+  test('中键拖空白画布时，整张图一起平移', async ({ page }) => {
+    await page.goto('/kg?start=a101&end=dbb&hops=2')
+    await page.locator('.graph-panel--L [data-node-id]').first().waitFor({ timeout: 25_000 })
+    await page.waitForTimeout(1500)
+
+    const ids = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('.graph-panel--L [data-node-id]'))
+        .map((el) => (el as HTMLElement).dataset.nodeId!)
+        .slice(0, 2),
+    )
+    expect(ids.length, '左侧图里节点不足两个').toBe(2)
+    const cards = ids.map((id) => page.locator(`.graph-panel--L [data-node-id="${id}"]`).first())
+    const before = await Promise.all(cards.map(async (c) => (await c.boundingBox())!))
+
+    // 面板左上角取一个不在卡片上的点
+    const body = (await page.locator('.graph-panel--L .graph-panel__body').boundingBox())!
+    const x = body.x + 12
+    const y = body.y + 12
+    const onCard = await page.evaluate(
+      ([px, py]) =>
+        Boolean((document.elementFromPoint(px, py) as HTMLElement)?.closest('[data-node-id]')),
+      [x, y],
+    )
+    expect(onCard, '取点落在了节点卡片上，换个位置').toBe(false)
+
+    await page.mouse.move(x, y)
+    await page.mouse.down({ button: 'middle' })
+    for (let i = 1; i <= 10; i++) {
+      await page.mouse.move(x + i * 12, y + i * 8)
+      await page.waitForTimeout(20)
+    }
+    await page.mouse.up({ button: 'middle' })
+    await page.waitForTimeout(400)
+
+    const after = await Promise.all(cards.map(async (c) => (await c.boundingBox())!))
+    const deltas = after.map((a, i) => ({ dx: a.x - before[i].x, dy: a.y - before[i].y }))
+
+    expect(Math.hypot(deltas[0].dx, deltas[0].dy), '空白处中键没能平移画布').toBeGreaterThan(40)
+    // 平移是整体的：两个节点位移必须一致，不能只动一个
+    expect(Math.abs(deltas[0].dx - deltas[1].dx)).toBeLessThan(5)
+    expect(Math.abs(deltas[0].dy - deltas[1].dy)).toBeLessThan(5)
+  })
+
   test('关闭编辑弹窗后节点不会跟着鼠标跑', async ({ page }) => {
     // 右键 pointerdown 后 contextmenu 打开弹窗，pointerup 被弹窗吞掉，
     // G6 里留下没清掉的按下记录。弹窗关闭后鼠标一动就会补发 dragstart。
