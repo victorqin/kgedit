@@ -1,0 +1,116 @@
+.path-status {
+  border: 1px solid var(--kg-border-soft);
+  border-radius: var(--kg-radius-lg);
+  background: var(--kg-bg-surface);
+  padding: 10px 14px;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  overflow: hidden;
+}
+
+.path-status__label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: none;
+}
+
+.path-status__label-text {
+  font-family: var(--kg-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  color: var(--kg-text-muted);
+  font-weight: 600;
+}
+
+.path-status__divider {
+  width: 1px;
+  height: 22px;
+  background: var(--kg-border-soft);
+  flex: none;
+}
+
+.path-status__track {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 3px 0;
+}
+
+.path-status__segments {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--kg-mono);
+  font-size: 12.5px;
+}
+
+.path-status__segment {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+}
+
+.path-status__arrow {
+  color: var(--kg-text-soft);
+  white-space: nowrap;
+}
+
+.path-status__node {
+  padding: 3px 9px;
+  border-radius: var(--kg-radius-sm);
+  border: 1px solid var(--kg-border-mid);
+  color: var(--kg-text-dim);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  background: transparent;
+  font-family: var(--kg-mono);
+  font-size: 12.5px;
+  transition: background var(--kg-dur-fast) var(--kg-ease);
+}
+
+.path-status__node:hover {
+  background: #1b2532;
+}
+
+.path-status__node--start {
+  border-color: var(--kg-border-l);
+  color: var(--kg-accent-l);
+}
+
+.path-status__node--end {
+  border-color: var(--kg-border-r);
+  color: var(--kg-accent-r);
+}
+
+.path-status__none {
+  font-family: var(--kg-mono);
+  font-size: 12.5px;
+  color: var(--kg-text-muted);
+  white-space: nowrap;
+}
+
+.path-status__hint {
+  flex: none;
+  font-family: var(--kg-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--kg-text-muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .path-status__hint,
+  .path-status__label-text {
+    display: none;
+  }
+}
