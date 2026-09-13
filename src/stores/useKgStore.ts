@@ -4,8 +4,10 @@ import { immer } from 'zustand/middleware/immer'
 import { createGraphSlice, type GraphSlice } from './slices/graph'
 import { createPickerSlice, type PickerSlice } from './slices/picker'
 import { createSelectionSlice, type SelectionSlice } from './slices/selection'
+import { createEditorSlice, type EditorSlice } from './slices/editor'
+import { createUiSlice, type UiSlice } from './slices/ui'
 
-export type KgState = GraphSlice & PickerSlice & SelectionSlice
+export type KgState = GraphSlice & PickerSlice & SelectionSlice & EditorSlice & UiSlice
 
 export type SliceCreator<T> = StateCreator<KgState, [['zustand/immer', never]], [], T>
 
@@ -15,6 +17,8 @@ export const useKgStore = create<KgState>()(
       ...createGraphSlice(...a),
       ...createPickerSlice(...a),
       ...createSelectionSlice(...a),
+      ...createEditorSlice(...a),
+      ...createUiSlice(...a),
     })),
     { name: 'kg-store' },
   ),
