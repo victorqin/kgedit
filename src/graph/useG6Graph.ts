@@ -7,6 +7,9 @@ import type { Selection } from '@/stores/slices/selection'
 /** 单击与双击去重窗口。双击会先触发一次 click，那是一次白发的网络请求。 */
 const DBLCLICK_GUARD_MS = 250
 
+/** 缩放下限。低于这个比例卡片上的字就读不了了。 */
+const MIN_ZOOM = 0.5
+
 export interface G6Handlers {
   onNodeClick: (id: string) => void
   onNodeDblClick: (id: string) => void
@@ -20,8 +23,10 @@ interface GraphLike {
   setData: (d: unknown) => void
   render: () => Promise<unknown>
   destroy: () => void
-  zoomTo: (z: number) => Promise<unknown>
-  focusElement: (id: string) => Promise<unknown>
+  fitView: (options?: { when?: 'overflow' | 'always' }, animation?: false) => Promise<unknown>
+  getZoom: () => number
+  zoomTo: (zoom: number, animation?: false) => Promise<unknown>
+  focusElement: (id: string, animation?: false) => Promise<unknown>
   setElementState: (state: Record<string, string[]>) => void | Promise<unknown>
   on: (event: string, cb: (e: { target?: { id?: string } }) => void) => void
 }
@@ -46,7 +51,6 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
   }, [handlers])
 
   const simplified = (payload?.nodes.length ?? 0) > SIMPLIFY_THRESHOLD
-  const centerId = payload?.meta.centerId
 
   // 节点类型无法热切换，只有跨越简化阈值时才重建实例
   useEffect(() => {
@@ -135,10 +139,17 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
     void (async () => {
       graph.setData(toG6Data(payload))
       await graph.render()
-      if (cancelled || !centerId) return
+      if (cancelled) return
       try {
-        await graph.zoomTo(0.92)
-        await graph.focusElement(centerId)
+        // 只在内容溢出时缩放，避免两三个节点时被放得过大
+        await graph.fitView({ when: 'overflow' }, false)
+        // 节点多时 fitView 会把字缩到看不清；触底后改为聚焦中心节点，
+        // 其余部分交给用户平移，总比全都看不清强。
+        if (graph.getZoom() < MIN_ZOOM) {
+          await graph.zoomTo(MIN_ZOOM, false)
+          const center = payload.meta.centerId
+          if (center) await graph.focusElement(center, false)
+        }
       } catch {
         // 布局尚未就绪时忽略
       }
@@ -147,7 +158,7 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
     return () => {
       cancelled = true
     }
-  }, [payload, centerId])
+  }, [payload])
 
   // 选中态：节点卡片直接改样式，边走 G6 的 state
   useEffect(() => {

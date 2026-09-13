@@ -83,12 +83,21 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .top-bar__title {
   font-size: 21px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-bar__lang {
+  width: 104px;
+  flex: none;
 }
 
 .top-bar__spacer {
@@ -142,8 +151,28 @@
   margin: 0;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 900px) {
   .top-bar__stats {
+    display: none;
+  }
+}
+
+/* 窄屏下顶栏原本会被语言选择器和头像挤爆，撑出横向滚动条 */
+@media (max-width: 520px) {
+  .top-bar {
+    padding: 12px 12px 0;
+    gap: 10px;
+  }
+
+  .top-bar__title {
+    font-size: 17px;
+  }
+
+  .top-bar__lang {
+    width: 76px;
+  }
+
+  .top-bar__avatar {
     display: none;
   }
 }

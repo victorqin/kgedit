@@ -92,6 +92,14 @@ export function buildGraphOptions({ side, simplified }: { side: Side; simplified
         labelBackgroundRadius: 4,
         labelBackgroundPadding: [3, 7, 3, 7],
         labelAutoRotate: false,
+        // 按边 id 散开标签沿线的位置，缓解相邻边标签互相压盖
+        // （设计稿原本就有这一手，用的是同样的三个落点）
+        labelPlacement: (d: { id?: string }) => {
+          const id = String(d.id ?? '')
+          let h = 0
+          for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 3
+          return [0.34, 0.5, 0.66][h]
+        },
         labelPadding: 4,
       },
       state: { selected: { stroke: '#f59e0b', lineWidth: 2.6, labelFill: '#f0b046' } },

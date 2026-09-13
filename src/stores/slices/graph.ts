@@ -71,6 +71,13 @@ export const createGraphSlice: SliceCreator<GraphSlice> = (set, get) => ({
       if (!seq.isCurrent(key, ticket)) return // 过期响应，丢弃
       set((s) => {
         s[SUB_KEY[side]] = data
+        // 输入框还空着就回填中心节点名 —— 从 URL 直接进来时没人填过它。
+        // 用户已经输入了内容则不覆盖。
+        const queryKey = side === 'L' ? 'qStart' : 'qEnd'
+        if (!s[queryKey].trim()) {
+          const center = data.nodes.find((n) => n.id === data.meta.centerId)
+          if (center) s[queryKey] = center.label
+        }
       })
     } catch (e) {
       if (!seq.isCurrent(key, ticket)) return

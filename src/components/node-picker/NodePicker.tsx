@@ -39,6 +39,27 @@ export function NodePicker({ side }: { side: Side }) {
 
   const treeData = useMemo(() => toAntTree(tree, hlId), [tree, hlId])
 
+  // defaultExpandAll 只在挂载时生效：过滤后新出现的分支会保持折叠，
+  // 用户搜完什么也看不到。所以展开态改为从数据派生。
+  // 有查询词时全展开；没有时只展开第一层（域），与 spec 一致。
+  const autoExpanded = useMemo(() => {
+    const hasQuery = Boolean(value.trim())
+    const keys: string[] = []
+    const walk = (nodes: TreeNode[], depth: number) => {
+      for (const n of nodes) {
+        if (n.nodeId) continue
+        if (hasQuery || depth === 0) keys.push(n.key)
+        walk(n.children ?? [], depth + 1)
+      }
+    }
+    walk(tree, 0)
+    return keys
+  }, [tree, value])
+
+  // 用户手动折叠的结果只对当前这棵树有效，数据一变就回到派生值
+  const [override, setOverride] = useState<{ tree: TreeNode[]; keys: string[] } | null>(null)
+  const expandedKeys = override?.tree === tree ? override.keys : autoExpanded
+
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault()
@@ -101,7 +122,8 @@ export function NodePicker({ side }: { side: Side }) {
                 <Tree
                   treeData={treeData}
                   blockNode
-                  defaultExpandAll
+                  expandedKeys={expandedKeys}
+                  onExpand={(keys) => setOverride({ tree, keys: keys.map(String) })}
                   selectedKeys={hlId ? [`n:${hlId}`] : []}
                   onSelect={(keys) => {
                     const key = String(keys[0] ?? '')

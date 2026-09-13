@@ -30,7 +30,7 @@ export function TopBar() {
         value={i18n.resolvedLanguage}
         onChange={(lng) => void i18n.changeLanguage(lng)}
         aria-label={t('app.language')}
-        style={{ width: 104 }}
+        className="top-bar__lang"
         options={SUPPORTED_LNGS.map((l) => ({ value: l, label: LNG_LABELS[l] }))}
       />
 

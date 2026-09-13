@@ -125,3 +125,17 @@ describe('setCenter', () => {
     expect(s().path?.found).toBe(true)
   })
 })
+
+describe('input backfill', () => {
+  it('fills an empty search box with the centered node name', async () => {
+    useKgStore.setState({ startId: 'a101' })
+    await s().loadSide('L')
+    expect(s().qStart).toBe('A101 System')
+  })
+
+  it('does not clobber text the user has already typed', async () => {
+    useKgStore.setState({ startId: 'a101', qStart: 'my own text' })
+    await s().loadSide('L')
+    expect(s().qStart).toBe('my own text')
+  })
+})
