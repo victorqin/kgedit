@@ -1,0 +1,50 @@
+.editor-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 13px;
+}
+
+.editor-modal__label {
+  font-family: var(--kg-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--kg-text-muted);
+}
+
+.editor-modal__error {
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--kg-danger);
+}
+
+.editor-modal__foot {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.editor-modal__foot-spacer {
+  flex: 1;
+}
+
+.confirm-dialog__triple {
+  font-family: var(--kg-mono);
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--kg-text-dim);
+  background: #0b1017;
+  border: 1px solid var(--kg-border-mid);
+  border-radius: var(--kg-radius);
+  padding: 10px 12px;
+  margin-top: 12px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.confirm-dialog__body {
+  font-size: 13px;
+  color: var(--kg-text-muted);
+  line-height: 1.65;
+}
