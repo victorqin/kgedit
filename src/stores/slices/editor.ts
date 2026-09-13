@@ -5,7 +5,7 @@ import type { NodeInput, Taxonomy } from '@/api/types'
 import type { Side } from '@/theme/antdTheme'
 import type { SliceCreator } from '../useKgStore'
 
-export interface NodeDraft extends NodeInput {}
+export type NodeDraft = NodeInput
 export interface LinkDraft {
   label: string
 }
