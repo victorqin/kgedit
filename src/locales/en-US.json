@@ -52,7 +52,8 @@
     "edit": "Edit",
     "reverse": "Reverse",
     "delete": "Delete",
-    "none": "This node has no relations yet"
+    "none": "This node has no relations yet",
+    "empty3": "Middle-click and drag to move nodes or pan the canvas · scroll to zoom"
   },
   "editor": {
     "editNode": "Edit node · {{label}}",

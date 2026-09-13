@@ -47,6 +47,8 @@ export function RelationList() {
             {t('relations.empty')}
             <br />
             {t('relations.empty2')}
+            <br />
+            {t('relations.empty3')}
           </div>
         )}
 

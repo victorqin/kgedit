@@ -51,8 +51,9 @@ export function LinkToggle() {
       title={linked ? t('link.cut') : t('link.join')}
       aria-label={caption}
       onClick={() => {
-        if (linked) setOpen((v) => !v)
-        else void toggleStartEndLink()
+        // 已连接时不要在这里 setOpen：Popover 的 trigger="click" 自己会调
+        // onOpenChange(true)，两边同时改状态会让弹层开了立刻又被关掉。
+        if (!linked) void toggleStartEndLink()
       }}
     >
       {linked ? <LinkedIcon /> : <UnlinkedIcon />}

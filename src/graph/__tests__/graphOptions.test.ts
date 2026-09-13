@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { buildGraphOptions, SIMPLIFY_THRESHOLD, toG6Data } from '../graphOptions'
+import {
+  buildGraphOptions,
+  isMiddleButtonDrag,
+  MOUSE_BUTTONS,
+  SIMPLIFY_THRESHOLD,
+  toG6Data,
+} from '../graphOptions'
 import type { GraphPayload } from '@/api/types'
 
 const payload: GraphPayload = {
@@ -35,12 +41,44 @@ describe('buildGraphOptions', () => {
     expect(SIMPLIFY_THRESHOLD).toBeLessThanOrEqual(200)
   })
 
-  it('enables the three canvas behaviors from the design', () => {
-    expect(buildGraphOptions({ side: 'L', simplified: false }).behaviors).toEqual([
-      'drag-canvas',
-      'zoom-canvas',
-      'drag-element',
-    ])
+  it('keeps zoom on the wheel, ungated by any button', () => {
+    expect(buildGraphOptions({ side: 'L', simplified: false }).behaviors).toContain('zoom-canvas')
+  })
+})
+
+describe('isMiddleButtonDrag', () => {
+  it('allows a drag while the middle button is held', () => {
+    expect(isMiddleButtonDrag({ buttons: MOUSE_BUTTONS.MIDDLE })).toBe(true)
+  })
+
+  it('refuses the left button so it stays a pure selection gesture', () => {
+    expect(isMiddleButtonDrag({ buttons: MOUSE_BUTTONS.LEFT })).toBe(false)
+  })
+
+  it('refuses the right button, which opens the editor instead', () => {
+    expect(isMiddleButtonDrag({ buttons: MOUSE_BUTTONS.RIGHT })).toBe(false)
+  })
+
+  it('refuses when no button is held at all', () => {
+    // 这是关键的一条：编辑弹窗关闭后 G6 会补发一次 dragstart，
+    // 那一刻 buttons 为 0，必须拒绝，否则节点会跟着鼠标跑。
+    expect(isMiddleButtonDrag({ buttons: 0 })).toBe(false)
+  })
+
+  it('refuses when buttons is absent rather than defaulting to allow', () => {
+    expect(isMiddleButtonDrag({})).toBe(false)
+  })
+})
+
+describe('behaviors', () => {
+  it('gates both canvas panning and node dragging on the same predicate', () => {
+    const { behaviors } = buildGraphOptions({ side: 'L', simplified: false })
+    const gated = behaviors.filter(
+      (b): b is { type: string; enable: typeof isMiddleButtonDrag } =>
+        typeof b === 'object' && 'enable' in b,
+    )
+    expect(gated.map((b) => b.type).sort()).toEqual(['drag-canvas', 'drag-element'])
+    gated.forEach((b) => expect(b.enable).toBe(isMiddleButtonDrag))
   })
 })
 

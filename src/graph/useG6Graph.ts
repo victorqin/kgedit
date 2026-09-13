@@ -110,9 +110,20 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
       handlersRef.current.onNodeContextMenu(hit.dataset.nodeId!)
     }
 
+    // 中键是拖拽键，必须挡掉浏览器的默认行为：
+    // Windows / Linux 的 Chrome 会进入自动滚动模式，X11 下还会粘贴主选区。
+    const onMiddleDown = (ev: MouseEvent) => {
+      if (ev.button === 1) ev.preventDefault()
+    }
+    const onAuxClick = (ev: MouseEvent) => {
+      if (ev.button === 1) ev.preventDefault()
+    }
+
     el.addEventListener('click', onClick)
     el.addEventListener('dblclick', onDblClick)
     el.addEventListener('contextmenu', onContextMenu)
+    el.addEventListener('mousedown', onMiddleDown)
+    el.addEventListener('auxclick', onAuxClick)
 
     return () => {
       disposed = true
@@ -120,6 +131,8 @@ export function useG6Graph({ payload, side, selection, handlers }: Options) {
       el.removeEventListener('click', onClick)
       el.removeEventListener('dblclick', onDblClick)
       el.removeEventListener('contextmenu', onContextMenu)
+      el.removeEventListener('mousedown', onMiddleDown)
+      el.removeEventListener('auxclick', onAuxClick)
       try {
         graph?.destroy()
       } catch {

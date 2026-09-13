@@ -3,6 +3,25 @@ import { ACCENT, type Side } from '@/theme/antdTheme'
 import { buildNodeCard, CARD_SIZE } from './nodeCard'
 
 /**
+ * 鼠标按键位掩码。注意 `button` 在 G6 合成的 dragstart 上恒为 -1，
+ * 能区分按键的只有 `buttons`。
+ */
+export const MOUSE_BUTTONS = { LEFT: 1, RIGHT: 2, MIDDLE: 4 } as const
+
+/**
+ * 只有按住中键才允许拖拽 —— 画布平移与节点拖动都是。
+ *
+ * 这样做有两个好处：
+ * 1. 左键回归纯粹的选择语义，不会和拖拽抢事件。
+ * 2. 根除了「弹窗关掉后节点跟着鼠标跑」的问题：右键 pointerdown 后
+ *    contextmenu 打开弹窗，pointerup 被弹窗吞掉，G6 里留下一个没清掉的
+ *    按下记录；弹窗关闭后鼠标一动就补发 dragstart。那一刻没有任何键按下
+ *    （buttons === 0），这里直接拒绝，拖拽就无从发生。
+ */
+export const isMiddleButtonDrag = (event: { buttons?: number }): boolean =>
+  event.buttons === MOUSE_BUTTONS.MIDDLE
+
+/**
  * 超过这个节点数就不再渲染 HTML 卡片。
  * G6 的 html 节点是每节点一个真实 DOM 元素，几百个卡片加 d3-force 会卡到不可用。
  */
@@ -115,6 +134,11 @@ export function buildGraphOptions({ side, simplified }: { side: Side; simplified
       iterations: 300,
       animation: false,
     },
-    behaviors: ['drag-canvas', 'zoom-canvas', 'drag-element'],
+    behaviors: [
+      // 画布平移与节点拖动统一收敛到中键，左键只负责选择
+      { type: 'drag-canvas', enable: isMiddleButtonDrag },
+      'zoom-canvas',
+      { type: 'drag-element', enable: isMiddleButtonDrag },
+    ],
   }
 }
